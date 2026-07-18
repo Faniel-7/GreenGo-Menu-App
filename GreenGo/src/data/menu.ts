@@ -1,38 +1,54 @@
-export const categories = [
-  "Hot Drinks",
-  "Breakfast",
-  "Salads & Soup",
-  "Juices & Shakes",
-  "Soft Drinks",
-  "Rice",
-  "Pasta",
-  "Wrap",
-  "Pizza",
-  "Burger & Sandwich",
-  "Special Corner",
-];
-
-export const menuItems = {
-  Pizza: [
+export const menu = {
+  pizza: [
     {
       id: 1,
-      name: "Pizza Margherita",
-      price: "350 ETB",
-      image: require("../../assets/images/pizza-1.jpg"),
+      name: "GreenGo Special Pizza",
+      price: 900,
     },
-
     {
       id: 2,
-      name: "Pepperoni Pizza",
-      price: "420 ETB",
-      image: require("../../assets/images/pizza-2.jpg"),
+      name: "Pizza",
+      price: 850,
     },
-
     {
       id: 3,
+      name: "4 Season Pizza",
+      price: 1100,
+    },
+    {
+      id: 4,
       name: "Chicken Pizza",
-      price: "450 ETB",
-      image: require("../../assets/images/pizza-3.jpg"),
+      price: 1000,
+    },
+    {
+      id: 5,
+      name: "Calzone Pizza",
+      price: 900,
+    },
+    {
+      id: 6,
+      name: "Turkish Pizza",
+      price: 1300,
+    },
+    {
+      id: 7,
+      name: "Tuna Pizza",
+      price: 850,
+    },
+    {
+      id: 8,
+      name: "Beef Pizza",
+      price: 750,
+    },
+    {
+      id: 9,
+      name: "Margherita Pizza",
+      price: 750,
+    },
+    {
+      id: 10,
+      name: "Vegetable Pizza",
+      price: 550,
     },
   ],
 };
