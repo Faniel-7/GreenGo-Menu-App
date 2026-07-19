@@ -4,6 +4,17 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "rea
 import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
+import { Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
+
+const isMobile = width < 768;
+
+const isTablet = width >= 768 && width < 1200;
+
+const isDesktop = width >= 1200;
+
+const isLargeScreen = width >= 768;
 
 
 const burgerItems = [
@@ -34,21 +45,28 @@ export default function CategoryScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.content}>
-        {/* LEFT SIDE */}
-        <TouchableOpacity
-          style={styles.settings}
-          onPress={() => setSidebarVisible(!sidebarVisible)}>
-            <Ionicons
-            name="menu"
-            size={32}
-            color="#fff"
-            />
-            </TouchableOpacity>
+        {
+  isLargeScreen && (
+    <View style={styles.DesktopDevider} />
+  )
+}
+        {isMobile && (
+  <TouchableOpacity
+    style={styles.settings}
+    onPress={() => setSidebarVisible(!sidebarVisible)}
+  >
+    <Ionicons
+      name="menu"
+      size={32}
+      color="#fff"
+    />
+  </TouchableOpacity>
+)}
             
             <Sidebar
-            visible={sidebarVisible}
-            onClose={() => setSidebarVisible(false)}
-            />
+  visible={isLargeScreen ? true : sidebarVisible}
+  onClose={() => setSidebarVisible(false)}
+/>
             
 
         <View style={styles.leftSide}>
@@ -65,9 +83,14 @@ export default function CategoryScreen() {
             CAFE • LOUNGE • FINE DINING
           </Text>
 
-          <Text style={styles.menuTitle}>
-            {String(category).toUpperCase()} MENU
-          </Text>
+          <Text
+  style={[
+    styles.menuTitle,
+    { color: "#f4b400" }
+  ]}
+>
+  BURGER & SANDWICH
+</Text>
 
           <View style={styles.underline} />
 
@@ -144,34 +167,97 @@ export default function CategoryScreen() {
 
         <View style={styles.rightSide}>
 
-          <Svg style={styles.wave} viewBox="0 0 120 1500">
-            <Path
-              d="
-                M 60 0
-                C 110 220, 20 350, 75 550
-                C 110 720, 20 930, 80 1180
-                C 100 1320, 60 1450, 70 1500
-              "
-              stroke="#f4b400"
-              strokeWidth="6"
-              fill="none"
-            />
-          </Svg>
+          {isMobile && (
+  <Svg style={styles.wave} viewBox="0 0 120 1500">
+    <Path
+      d="
+        M 60 0
+        C 110 220, 20 350, 75 550
+        C 110 720, 20 930, 80 1180
+        C 100 1320, 60 1450, 70 1500
+      "
+      stroke="#f4b400"
+      strokeWidth="6"
+      fill="none"
+    />
+  </Svg>
+)}
+
+          {isLargeScreen && (
+              <View>
+                <Image
+                  source={require("../../../assets/images/geen-glow.png")}
+                  style={styles.glowTop}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/geen-glow.png")}
+                  style={styles.glowBottom}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/tomato2.png")}
+                  style={styles.tomato1}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/tomato1.png")}
+                  style={styles.tomato2}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/chilli1.png")}
+                  style={styles.olive1}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/olive.png")}
+                  style={styles.olive2}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/cheese.png")}
+                  style={styles.cheese1}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/strawberry.png")}
+                  style={styles.cheese2}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/sparkle.png")}
+                  style={styles.sparkle1}
+                />
+          
+                <Image
+                  source={require("../../../assets/images/green2.png")}
+                  style={styles.sparkle2}
+                />
+              </View>
+            )}
+          
 
           <Image
-            source={require("../../../assets/images/pizza-10.png")}
-            style={styles.pizzaTop}
+            source={require("../../../assets/images/burger/burger1.png")}
+            style={styles.burgerTop}
           />
 
           <Image
-            source={require("../../../assets/images/pizza-8.png")}
-            style={styles.pizzaMiddle}
+            source={require("../../../assets/images/burger/burger2.png")}
+            style={styles.burgerMiddle}
           />
 
           <Image
-            source={require("../../../assets/images/pizza-7.png")}
-            style={styles.pizzaBottom}
+            source={require("../../../assets/images/burger/burger8.png")}
+            style={styles.burgerBottom}
           />
+
+          <Image
+            source={require("../../../assets/images/burger/burger11.png")}
+            style={styles.sandwichBottom}
+          />
+
 
           
 <Image
@@ -218,17 +304,17 @@ const styles = StyleSheet.create({
   },
 
   leftSide: {
-    width: "58%",
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 8,
-  },
+  width: isLargeScreen ? "52%" : "58%",
+  paddingTop: isLargeScreen ? 40 : 20,
+  paddingLeft: isLargeScreen ? 350 : 20,
+  paddingRight: 8,
+},
 
-  rightSide: {
-    width: "42%",
-    position: "relative",
-    overflow: "hidden",
-  },
+rightSide: {
+  width: isLargeScreen ? "48%" : "42%",
+  position: "relative",
+  overflow: "hidden",
+},
 
   logo: {
     width: 105,
@@ -287,7 +373,7 @@ const styles = StyleSheet.create({
   itemName: {
     color: "white",
     fontWeight: "900",
-    fontSize: 13,
+    fontSize: isLargeScreen ? 15 : 13,
     width: "55%",
     fontFamily: "verdana",
   },
@@ -309,7 +395,7 @@ const styles = StyleSheet.create({
 
   price: {
     color: "#f4b400",
-    fontSize: 15,
+    fontSize: isLargeScreen ? 17 : 15,
     fontWeight: "900",
     fontFamily: "verdana",
   },
@@ -330,32 +416,41 @@ const styles = StyleSheet.create({
     height: 1500,
   },
 
-  pizzaTop: {
-    position: "absolute",
-    top: 50,
-    right: -80,
-    width: 330,
-    height: 330,
-    resizeMode: "contain",
-  },
+burgerTop: {
+  position: "absolute",
+  top: isLargeScreen ? 20 : 50,
+  right: isLargeScreen ? 120 : -35,
+  width: isLargeScreen ? 420 : 300,
+  height: isLargeScreen ? 420 : 300,
+  resizeMode: "contain",
+},
 
-  pizzaMiddle: {
-    position: "absolute",
-    top: 420,
-    right: -50,
-    width: 240,
-    height: 240,
-    resizeMode: "contain",
-  },
+burgerMiddle: {
+  position: "absolute",
+  top: isLargeScreen ? 420 : 450,
+  right: isLargeScreen ? 120 : -35,
+  width: isLargeScreen ? 340 : 250,
+  height: isLargeScreen ? 340 : 250,
+  resizeMode: "contain",
+},
 
-  pizzaBottom: {
-    position: "absolute",
-    bottom: 95,
-    right: -40,
-    width: 220,
-    height: 220,
-    resizeMode: "contain",
-  },
+burgerBottom: {
+  position: "absolute",
+  bottom: isLargeScreen ? -70 : -10,
+  right: isLargeScreen ? 320 : -25,
+  width: isLargeScreen ? 300 : 250,
+  height: isLargeScreen ? 300 : 250,
+  resizeMode: "contain",
+},
+
+sandwichBottom: {
+  position: "absolute",
+  top: isLargeScreen ? 760 : 715,
+  right: isLargeScreen ? 30 : -27,
+  width: isLargeScreen ? 300 : 220,
+  height: isLargeScreen ? 300 : 220,
+  resizeMode: "contain",
+},
 
   badge: {
     position: "absolute",
@@ -377,13 +472,13 @@ const styles = StyleSheet.create({
   },
 
   badgeBottom: {
-    top: 1020,
+    top: 950,
     left: 25,
   },
 
   badgeText: {
     color: "#00b90c",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "900",
     textAlign: "center",
     fontFamily: "verdana",
@@ -400,7 +495,7 @@ const styles = StyleSheet.create({
 
   leaf2: {
     position: "absolute",
-    top: 1015,
+    top: 945,
     left: 45,
     width: 80,
     height: 80,
@@ -409,8 +504,8 @@ const styles = StyleSheet.create({
 
   leaf3: {
     position: "absolute",
-    bottom: 350,
-    left: 5,
+    bottom: 500,
+    left: 40,
     width: 60,
     height: 60,
     resizeMode: "contain",
@@ -467,4 +562,97 @@ iconCircle: {
     zIndex: 1000,
     fontFamily: "verdana",
   },
+
+glowTop: {
+  position: "absolute",
+  top: 750,
+  right: 10,
+  width: 400,
+  height: 400,
+  opacity: 0,
+},
+
+glowBottom: {
+  position: "absolute",
+  bottom: 0,
+  right: -50,
+  width: 420,
+  height: 420,
+  opacity: 0.45,
+},
+
+tomato1: {
+  position: "absolute",
+  top: 20,
+  left: 480,
+  width: 105,
+  height: 105,
+},
+
+tomato2: {
+  position: "absolute",
+  top: 570,
+  left: 30,
+  width: 100,
+  height: 100,
+},
+
+olive1: {
+  position: "absolute",
+  top: 250,
+  right: 420,
+  width: 135,
+  height: 135,
+},
+
+olive2: {
+  position: "absolute",
+   top: 250,
+  right: 90,
+  width: 135,
+  height: 135,
+},
+
+cheese1: {
+  position: "absolute",
+   top: 80,
+  right: 490,
+  width: 135,
+  height: 135,
+},
+
+cheese2: {
+  position: "absolute",
+  top: 1060,
+  right: 130,
+  width: 65,
+  height: 65,
+},
+
+sparkle1: {
+  position: "absolute",
+  top: 420,
+  left: 180,
+  width: 450,
+  height: 450,
+
+},
+
+sparkle2: {
+  position: "absolute",
+  top: 770,
+  left: 100,
+  width: 130,
+  height: 130,
+},
+
+DesktopDevider: {
+  position: "absolute",
+  left: 270,
+  top: 0,
+  bottom: 0,
+  width: 2,
+  backgroundColor: "#27c93f",
+  zIndex: 999,
+}
 });
