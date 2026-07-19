@@ -10,6 +10,11 @@ import {
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
+import { Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
+
+const isLargeScreen = width >= 768;
 
 const icons: Record<string, keyof typeof Ionicons.glyphMap> = {
   "Hot Drinks": "cafe",
@@ -125,9 +130,9 @@ const styles = StyleSheet.create({
   },
 
   sidebar: {
-    width: 300,
+    width: isLargeScreen ? 270 : 290,
     height: "100%",
-    backgroundColor: "rgba(20,20,20,0.9)",
+    backgroundColor: isLargeScreen ? "rgba(20,20,20,0.4)" : "rgba(20,20,20,0.9)",
     paddingTop: 90,
     paddingHorizontal: 24,
     zIndex: 9999,
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 22,
+    fontSize: isLargeScreen ? 18 : 22,
     fontWeight: "900",
     color: "#ffffff",
     marginLeft: 18,
