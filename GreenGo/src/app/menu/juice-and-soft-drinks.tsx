@@ -206,18 +206,28 @@ export default function CategoryScreen() {
           </Svg>
 
           <Image
-            source={require("../../../assets/images/pizza-10.png")}
-            style={styles.pizzaTop}
+            source={require("../../../assets/images/juice/juice3.png")}
+            style={styles.juiceTop}
           />
 
           <Image
-            source={require("../../../assets/images/pizza-8.png")}
-            style={styles.pizzaMiddle}
+            source={require("../../../assets/images/juice/juice6.png")}
+            style={styles.juiceMiddle}
           />
 
           <Image
-            source={require("../../../assets/images/pizza-7.png")}
-            style={styles.pizzaBottom}
+            source={require("../../../assets/images/juice/juice8.png")}
+            style={styles.juiceBottom}
+          />
+
+          <Image
+            source={require("../../../assets/images/juice/juice5.png")}
+            style={styles.juiceBottom2}
+          />
+
+          <Image
+            source={require("../../../assets/images/juice/juice1.png")}
+            style={styles.juiceBottom3}
           />
 
           
@@ -385,30 +395,48 @@ const styles = StyleSheet.create({
     height: 2000,
   },
 
-  pizzaTop: {
+  juiceTop: {
     position: "absolute",
-    top: 50,
+    top: 70,
+    right: -75,
+    width: 320,
+    height: 320,
+    resizeMode: "contain",
+  },
+
+  juiceMiddle: {
+    position: "absolute",
+    top: 500,
+    right: -65,
+    width: 280,
+    height: 280,
+    resizeMode: "contain",
+  },
+
+  juiceBottom: {
+    position: "absolute",
+    bottom: 730,
+    right: -30,
+    width: 210,
+    height: 210,
+    resizeMode: "contain",
+  },
+
+  juiceBottom2: {
+    position: "absolute",
+    bottom: 295,
     right: -80,
-    width: 330,
-    height: 330,
+    width: 300,
+    height: 300,
     resizeMode: "contain",
   },
 
-  pizzaMiddle: {
+  juiceBottom3: {
     position: "absolute",
-    top: 420,
-    right: -50,
-    width: 240,
-    height: 240,
-    resizeMode: "contain",
-  },
-
-  pizzaBottom: {
-    position: "absolute",
-    bottom: 95,
-    right: -40,
-    width: 220,
-    height: 220,
+    bottom: -50,
+    right: -25,
+    width: 200,
+    height: 200,
     resizeMode: "contain",
   },
 
