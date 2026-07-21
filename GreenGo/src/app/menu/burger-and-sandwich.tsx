@@ -86,7 +86,7 @@ export default function CategoryScreen() {
           <Text
   style={[
     styles.menuTitle,
-    { color: "#f4b400" }
+    { color: "#f4b400" , fontSize: isLargeScreen ? 25 : 18}
   ]}
 >
   BURGER & SANDWICH
@@ -356,7 +356,7 @@ rightSide: {
   },
 
   underline: {
-    width: 190,
+    width: isLargeScreen ? 280 : 190,
     height: 4,
     backgroundColor: "#f4b400",
     marginTop: 8,

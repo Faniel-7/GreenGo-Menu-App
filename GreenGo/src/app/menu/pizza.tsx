@@ -78,7 +78,7 @@ export default function Category() {
             CAFE • LOUNGE • FINE DINING
           </Text>
 
-          <Text style={[styles.menuTitle, { fontFamily: "verdana" }]}>
+          <Text style={[styles.menuTitle, { fontFamily: "verdana" ,fontSize: isLargeScreen ? 25 : 28}]}>
             PIZZA MENU
           </Text>
 
@@ -314,14 +314,14 @@ const styles = StyleSheet.create({
   },
 
   menuTitle: {
-    color: "white",
+    color: "#f4b400",
     fontSize: 32,
     fontWeight: "900",
     fontFamily: "verdana",
   },
 
   underline: {
-    width: 190,
+    width: isLargeScreen ? 160 : 170,
     height: 4,
     backgroundColor: "#f4b400",
     marginTop: 8,
