@@ -4,6 +4,17 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "rea
 import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
+import { Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
+
+const isMobile = width < 768;
+
+const isTablet = width >= 768 && width < 1200;
+
+const isDesktop = width >= 1200;
+
+const isLargeScreen = width >= 768;
 
 
 const breakfastItems = [
@@ -33,21 +44,29 @@ export default function Category() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.content}>
-        {/* LEFT SIDE */}
-        <TouchableOpacity
-          style={styles.settings}
-          onPress={() => setSidebarVisible(!sidebarVisible)}>
-            <Ionicons
-            name="menu"
-            size={32}
-            color="#fff"
-            />
-            </TouchableOpacity>
+        {
+  isLargeScreen && (
+    <View style={styles.DesktopDevider} />
+  )
+}
+
+        {isMobile && (
+  <TouchableOpacity
+    style={styles.settings}
+    onPress={() => setSidebarVisible(!sidebarVisible)}
+  >
+    <Ionicons
+      name="menu"
+      size={32}
+      color="#fff"
+    />
+  </TouchableOpacity>
+)}
             
             <Sidebar
-            visible={sidebarVisible}
-            onClose={() => setSidebarVisible(false)}
-            />
+  visible={isLargeScreen ? true : sidebarVisible}
+  onClose={() => setSidebarVisible(false)}
+/>
             
 
         <View style={styles.leftSide}>
@@ -65,7 +84,7 @@ export default function Category() {
           </Text>
 
           <Text style={styles.menuTitle}>
-            {String(category).toUpperCase()} MENU
+            BREAKFAST
           </Text>
 
           <View style={styles.underline} />
@@ -143,33 +162,90 @@ export default function Category() {
 
         <View style={styles.rightSide}>
 
-          <Svg style={styles.wave} viewBox="0 0 120 1500">
-            <Path
-              d="
-                M 60 0
-                C 110 220, 20 350, 75 550
-                C 110 720, 20 930, 80 1180
-                C 100 1320, 60 1450, 70 1500
-              "
-              stroke="#f4b400"
-              strokeWidth="6"
-              fill="none"
-            />
-          </Svg>
+          {isMobile && (
+  <Svg style={styles.wave} viewBox="0 0 120 1500">
+    <Path
+      d="
+        M 60 0
+        C 110 220, 20 350, 75 550
+        C 110 720, 20 930, 80 1180
+        C 100 1320, 60 1450, 70 1500
+      "
+      stroke="#f4b400"
+      strokeWidth="6"
+      fill="none"
+    />
+  </Svg>
+)}
+
+          {isLargeScreen && (
+                        <View>
+                    
+                          <Image
+                            source={require("../../../assets/images/geen-glow.png")}
+                            style={styles.glowBottom}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/tomato2.png")}
+                            style={styles.tomato1}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/tomato1.png")}
+                            style={styles.tomato2}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/chilli1.png")}
+                            style={styles.olive1}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/olive.png")}
+                            style={styles.olive2}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/cheese.png")}
+                            style={styles.cheese1}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/strawberry.png")}
+                            style={styles.cheese2}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/sparkle.png")}
+                            style={styles.sparkle1}
+                          />
+                    
+                          <Image
+                            source={require("../../../assets/images/green2.png")}
+                            style={styles.sparkle2}
+                          />
+                        </View>
+                      )}
 
           <Image
-            source={require("../../../assets/images/pizza-10.png")}
-            style={styles.pizzaTop}
+            source={require("../../../assets/images/breakfast/breakfast3.png")}
+            style={styles.breakfastTop}
           />
 
           <Image
-            source={require("../../../assets/images/pizza-8.png")}
-            style={styles.pizzaMiddle}
+            source={require("../../../assets/images/breakfast/breakfast4.png")}
+            style={styles.breakfastMiddle}
           />
 
           <Image
-            source={require("../../../assets/images/pizza-7.png")}
-            style={styles.pizzaBottom}
+            source={require("../../../assets/images/breakfast/breakfast1.png")}
+            style={styles.breakfastBottom}
+          />
+
+          <Image
+            source={require("../../../assets/images/breakfast/breakfast2.png")}
+            style={styles.breakfastBottom2}
           />
 
           
@@ -217,17 +293,17 @@ const styles = StyleSheet.create({
   },
 
   leftSide: {
-    width: "58%",
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 8,
-  },
+  width: isDesktop ? "52%" : "58%",
+  paddingTop: isDesktop ? 40 : 20,
+  paddingLeft: isDesktop ? 350 : 20,
+  paddingRight: 8,
+},
 
   rightSide: {
-    width: "42%",
-    position: "relative",
-    overflow: "hidden",
-  },
+  width: isDesktop ? "48%" : "42%",
+  position: "relative",
+  overflow: "hidden",
+},
 
   logo: {
     width: 105,
@@ -262,14 +338,14 @@ const styles = StyleSheet.create({
   },
 
   menuTitle: {
-    color: "white",
-    fontSize: 32,
+    color: "#f4b400",
+    fontSize: 25,
     fontWeight: "900",
     fontFamily: "verdana",
   },
 
   underline: {
-    width: 190,
+    width: 150,
     height: 4,
     backgroundColor: "#f4b400",
     marginTop: 8,
@@ -286,7 +362,7 @@ const styles = StyleSheet.create({
   itemName: {
     color: "white",
     fontWeight: "900",
-    fontSize: 13,
+    fontSize: isLargeScreen ? 15.5 : 13,
     width: "55%",
     fontFamily: "verdana",
   },
@@ -308,7 +384,7 @@ const styles = StyleSheet.create({
 
   price: {
     color: "#f4b400",
-    fontSize: 14,
+    fontSize: isLargeScreen ? 17 : 14,
     fontWeight: "900",
     fontFamily: "verdana",
   },
@@ -329,32 +405,41 @@ const styles = StyleSheet.create({
     height: 1500,
   },
 
-  pizzaTop: {
-    position: "absolute",
-    top: 50,
-    right: -80,
-    width: 330,
-    height: 330,
-    resizeMode: "contain",
-  },
+  breakfastTop: {
+  position: "absolute",
+  top: isLargeScreen ? -30 : 50,
+  right: isLargeScreen ? 60 : -90,
+  width: isLargeScreen ? 600 : 340,
+  height: isLargeScreen ? 600 : 340,
+  resizeMode: "contain",
+},
 
-  pizzaMiddle: {
-    position: "absolute",
-    top: 420,
-    right: -50,
-    width: 240,
-    height: 240,
-    resizeMode: "contain",
-  },
+breakfastMiddle: {
+  position: "absolute",
+  top: isLargeScreen ? 390 : 420,
+  right: isLargeScreen ? 60 : -45,
+  width: isLargeScreen ? 520 : 350,
+  height: isLargeScreen ? 520 : 350,
+  resizeMode: "contain",
+},
 
-  pizzaBottom: {
-    position: "absolute",
-    bottom: 95,
-    right: -40,
-    width: 220,
-    height: 220,
-    resizeMode: "contain",
-  },
+breakfastBottom: {
+  position: "absolute",
+  bottom: isLargeScreen ? -30 : 0,
+  right: isLargeScreen ? 350 : -40,
+  width: isLargeScreen ? 280 : 220,
+  height: isLargeScreen ? 280 : 220,
+  resizeMode: "contain",
+},
+
+breakfastBottom2: {
+  position: "absolute",
+  bottom: isLargeScreen ? 90 : 255,
+  right: isLargeScreen ? -70 : -40,
+  width: isLargeScreen ? 430 : 260,
+  height: isLargeScreen ? 430 : 260,
+  resizeMode: "contain",
+},
 
   badge: {
     position: "absolute",
@@ -466,4 +551,97 @@ iconCircle: {
     zIndex: 1000,
     fontFamily: "verdana",
   },
+
+  glowTop: {
+  position: "absolute",
+  top: 750,
+  right: 90,
+  width: 400,
+  height: 400,
+  opacity: 0.45,
+},
+
+glowBottom: {
+  position: "absolute",
+  bottom: 0,
+  right: -50,
+  width: 420,
+  height: 420,
+  opacity: 0.45,
+},
+
+tomato1: {
+  position: "absolute",
+  top: 20,
+  left: 480,
+  width: 105,
+  height: 105,
+},
+
+tomato2: {
+  position: "absolute",
+  top: 570,
+  left: 30,
+  width: 100,
+  height: 100,
+},
+
+olive1: {
+  position: "absolute",
+  top: 250,
+  right: 420,
+  width: 135,
+  height: 135,
+},
+
+olive2: {
+  position: "absolute",
+   top: 250,
+  right: 90,
+  width: 135,
+  height: 135,
+},
+
+cheese1: {
+  position: "absolute",
+   top: 80,
+  right: 490,
+  width: 135,
+  height: 135,
+},
+
+cheese2: {
+  position: "absolute",
+  top: 760,
+  right: 370,
+  width: 65,
+  height: 65,
+},
+
+sparkle1: {
+  position: "absolute",
+  top: 120,
+  left: 250,
+  width: 350,
+  height: 250,
+  opacity: 0.4,
+},
+
+sparkle2: {
+  position: "absolute",
+  top: 770,
+  left: 100,
+  width: 130,
+  height: 130,
+},
+
+DesktopDevider: {
+  position: "absolute",
+  left: 270,
+  top: 0,
+  bottom: 0,
+  width: 2,
+  backgroundColor: "#27c93f",
+  zIndex: 999,
+}
 });

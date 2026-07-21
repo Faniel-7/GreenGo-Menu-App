@@ -80,7 +80,7 @@ export default function Category() {
           <Text
   style={[
     styles.menuTitle,
-    { color: "#f4b400" }
+    { color: "#f4b400" ,fontSize: isLargeScreen ? 25 : 24}
   ]}
 >
   CHINESE MENU
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   },
 
   underline: {
-    width: 190,
+    width: isLargeScreen ? 200 : 175,
     height: 4,
     backgroundColor: "#f4b400",
     marginTop: 8,
