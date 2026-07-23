@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect } from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -17,26 +19,34 @@ const isDesktop = width >= 1200;
 const isLargeScreen = width >= 768;
 
 
-const breakfastItems = [
-  { name: "BOILED EGG", price: "150" },
-  { name: "SPECIAL OMELET", price: "550" },
-  { name: "OMELET", price: "250" },
-  { name: "SCRAMBLED EGG", price: "250" },
-  { name: "SCRAMBLED EGG WITH MEAT", price: "450" },
-  { name: "SPECIAL COMBO", price: "850" },
-  { name: "COMBO", price: "650" },
-  { name: "CHICKEN BREAST", price: "450" },
-  { name: "AVOCADO TOAST", price: "550" },
-  { name: "KINCHE", price: "300" },
-  { name: "KINCHE & MEAT", price: "550" },
-  { name: "CHECHEBSA", price: "300" },
-  { name: "FUUL", price: "250" },
-  { name: "SPECIAL BREAKFAST", price: "650" },
-];
-
 export default function Category() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [breakfastItems, setBreakfastItems] = useState<any[]>([]);
+  
+    async function fetchBreakfast() {
+
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 8)
+    .eq("active", true)
+    .order("id");
+
+
+  if (error) {
+    console.log("Breakfast fetch error:", error);
+    return;
+  }
+
+
+  setBreakfastItems(data);
+
+}
+  
+    useEffect(() => {
+      fetchBreakfast();
+    }, []);
 
   return (
     <ScrollView

@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect } from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -16,22 +18,34 @@ const isDesktop = width >= 1200;
 
 const isLargeScreen = width >= 768;
 
-
-const chineseItems = [
-  { name: "CHINESE BURGER", price: "500" },
-  { name: "CHINESE CRISPY", price: "750" },
-  { name: "DUMPLING", price: "700" },
-  { name: "SWEET & SOUR CHICKEN", price: "550" },
-  { name: "NOODLES", price: "550" },
-  { name: "NOODLES WITH BEEF", price: "600" },
-  { name: "SPICY CHICKEN", price: "1300" },
-  { name: "BRAISED BEEF", price: "600" },
-  { name: "EGG WITH MEAT", price: "500" },
-];
-
 export default function Category() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [chineseItems, setChineseItems] = useState<any[]>([]);
+
+  async function fetchChinese() {
+
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 12)
+    .eq("active", true)
+    .order("id");
+
+
+  if (error) {
+    console.log("Chinese fetch error:", error);
+    return;
+  }
+
+
+  setChineseItems(data);
+
+}
+
+useEffect(() => {
+  fetchChinese();
+}, []);
 
   return (
     <ScrollView
