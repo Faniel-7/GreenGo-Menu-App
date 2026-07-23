@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect} from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -16,25 +18,30 @@ const isDesktop = width >= 1200;
 
 const isLargeScreen = width >= 768;
 
-
-const pizzaItems = [
-  { name: "GREEN GO SPECIAL PIZZA", price: "900" },
-  { name: "PIZZA", price: "850" },
-  { name: "4 SEASON PIZZA", price: "1100" },
-  { name: "CHICKEN PIZZA", price: "1000" },
-  { name: "CALZONE PIZZA", price: "900" },
-  { name: "TURKISH PIZZA", price: "1300" },
-  { name: "TUNA PIZZA", price: "850" },
-  { name: "BEEF PIZZA", price: "750" },
-  { name: "MARGHERITA PIZZA", price: "750" },
-  { name: "VEGETABLE PIZZA", price: "550" },
-
-  
-];
-
 export default function Category() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [pizzaItems, setPizzaItems] = useState<any[]>([]);
+
+  async function fetchPizzaItems() {
+    const { data, error } = await supabase
+      .from("category_items")
+      .select("*")
+      .eq("category_id", 5)
+      .eq("active", true)
+      .order("id");
+
+    if (error) {
+      console.log("Pizza fetch error:", error);
+      return;
+    }
+
+    setPizzaItems(data ?? []);
+  }
+
+  useEffect(() => {
+    fetchPizzaItems();
+  }, []);
 
   return (
     <ScrollView

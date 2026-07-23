@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect } from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -17,27 +19,33 @@ const isDesktop = width >= 1200;
 const isLargeScreen = width >= 768;
 
 
-const burgerItems = [
-  { name: "SPECIAL BURGER", price: "575" },
-  { name: "BURGER", price: "525" },
-  { name: "CHEESE BURGER", price: "550" },
-  { name: "CHICKEN BURGER", price: "625" },
-  { name: "CHICKEN CHEESE BURGER", price: "725" },
-  { name: "DOUBLE BURGER", price: "800" },
-  { name: "DOUBLE CHEESE BURGER", price: "1000" },
-  { name: "TRIPLE", price: "1300" },
-  { name: "CLUB SANDWICH", price: "575" },
-  { name: "TUNA SANDWICH", price: "575" },
-  { name: "STEAK SANDWICH", price: "575" },
-  { name: "SPECIAL EGG SANDWICH", price: "425" },
-  { name: "EGG SANDWICH", price: "375" },
-  { name: "VEGETABLE SANDWICH", price: "325" },
-  { name: "FRENCH FRIES", price: "275" },
-];
-
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [burgerItems, setBurgerItems] = useState<any[]>([]);
+
+  async function fetchBurgerItems() {
+
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 6)
+    .eq("active", true)
+    .order("id");
+
+
+  if (error) {
+    console.log("Burger fetch error:", error);
+    return;
+  }
+
+  setBurgerItems(data);
+
+}
+
+useEffect(() => {
+  fetchBurgerItems();
+}, []);
 
   return (
     <ScrollView
