@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect} from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -17,39 +19,41 @@ const isDesktop = width >= 1200;
 const isLargeScreen = width >= 768;
 
 
-const freshJuiceItems = [
-  { name: "AVOCADO JUICE", price: "300" },
-  { name: "MANGO JUICE", price: "250" },
-  { name: "PAPAYA JUICE", price: "250" },
-  { name: "APPLE JUICE", price: "400" },
-  { name: "STRAWBERRY JUICE", price: "400" },
-  { name: "SPECIAL JUICE", price: "400" },
-  { name: "ORANGE JUICE", price: "350" },
-  { name: "LEMON JUICE", price: "250" },
-  { name: "WATERMELON JUICE", price: "250" },
-  { name: "MIXED JUICE", price: "350" },
-];
-
-const shakeItems = [
-  { name: "BANANA SHAKE", price: "250" },
-  { name: "MUSCLE BUILD JUICE", price: "350" },
-  { name: "STRAWBERRY SMOOTH SHAKE", price: "400" },
-  { name: "GREEN GO SPECIAL SHAKE", price: "400" },
-  { name: "FRUIT PUNCH", price: "350" },
-  { name: "MILK SHAKE", price: "300" },
-  { name: "CHOCOLATE SHAKE", price: "350" },
-];
-
-const softDrinkItems = [
-  { name: "SMALL WATER", price: "60" },
-  { name: "SOFT DRINK", price: "100" },
-  { name: "AMBO", price: "100" },
-  { name: "MALT", price: "150" },
-];
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [juiceItems, setJuiceItems] = useState<any[]>([]);
+  
+  async function fetchJuices() {
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 10)
+    .eq("active", true)
+    .order("id");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  setJuiceItems(data);
+}
+useEffect(() => {
+  fetchJuices();
+}, []);
+const freshJuiceItems = juiceItems.filter(
+  (item) => item.section === "Fresh Juice Items"
+);
+
+const shakeItems = juiceItems.filter(
+  (item) => item.section === "Shake Items"
+);
+
+const softDrinkItems = juiceItems.filter(
+  (item) => item.section === "Soft Drink Items"
+);
 
   return (
     <ScrollView
