@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect } from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -16,41 +18,44 @@ const isDesktop = width >= 1200;
 
 const isLargeScreen = width >= 768;
 
-const coffeeItems = [
-  { name: "AMERICANO", price: "100" },
-  { name: "NORMAL COFFEE", price: "90" },
-  { name: "ESPRESSO", price: "130" },
-  { name: "MOCHA LATTE", price: "160" },
-  { name: "COFFEE LATTE", price: "120" },
-  { name: "ICE COFFEE", price: "110" },
-  { name: "CAPPUCCINO", price: "160" },
-];
 
-const specialDrinkItems = [
-  { name: "MILK CUP", price: "120" },
-  { name: "COLD MILK", price: "150" },
-  { name: "MILK WITH HONEY", price: "160" },
-  { name: "MACHIATTO", price: "130" },
-  { name: "DOUBLE MACHIATTO", price: "250" },
-  { name: "CHOCOLATE MACHIATTO", price: "150" },
-  { name: "CARAMEL MACHIATTO", price: "150" },
-  { name: "HOT CHOCOLATE", price: "200" },
-  { name: "ICE CHOCOLATE", price: "180" },
-  { name: "FASTING MACHIATTO", price: "150" },
-  { name: "COFFEE WITH HONEY", price: "130" },
-];
-
-const teaItems = [
-  { name: "SPECIAL TEA", price: "200" },
-  { name: "KARABAT TEA", price: "120" },
-  { name: "FENUGREEK TEA", price: "80" },
-  { name: "NORMAL TEA", price: "70" },
-  { name: "GINGER TEA", price: "80" },
-];
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [hotDrinkItems, setHotDrinkItems] = useState<any[]>([]);
+
+  async function fetchHotDrinks() {
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 7)
+    .eq("active", true)
+    .order("id");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  setHotDrinkItems(data);
+}
+
+useEffect(() => {
+  fetchHotDrinks();
+}, []);
+
+const coffeeItems = hotDrinkItems.filter(
+  (item) => item.section === "Coffee Items"
+);
+
+const specialDrinkItems = hotDrinkItems.filter(
+  (item) => item.section === "Special Drink Items"
+);
+
+const teaItems = hotDrinkItems.filter(
+  (item) => item.section === "Tea Items"
+);
 
   return (
     <ScrollView
