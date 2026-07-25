@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect} from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -17,31 +19,40 @@ const isDesktop = width >= 1200;
 const isLargeScreen = width >= 768;
 
 
-const riceItems = [
-  { name: "RICE WITH CHICKEN", price: "750" },
-  { name: "RICE WITH MEAT", price: "575" },
-  { name: "RICE WITH SCRAMBLED EGG & BEEF", price: "650" },
-  { name: "GREEN GO RICE", price: "625" },
-];
-
-const pastaItems = [
-  { name: "SPAGHETTI WITH MEAT", price: "475" },
-  { name: "SPAGHETTI WITH MEAT SAUCE", price: "475" },
-  { name: "SPAGHETTI WITH TOMATO SAUCE", price: "375" },
-  { name: "SPAGHETTI WITH VEGETABLE", price: "375" },
-];
-
-const wrapItems = [
-  { name: "BORTTO", price: "800" },
-  { name: "CHICKEN WRAP", price: "675" },
-  { name: "SPECIAL WRAP", price: "750" },
-  { name: "BEEF WRAP", price: "600" },
-  { name: "VEGETABLE WRAP", price: "350" },
-];
-
 export default function Category() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [foodItems, setFoodItems] = useState<any[]>([]);
+
+async function fetchRicePastaWrap() {
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 11)
+    .eq("active", true)
+    .order("id");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  setFoodItems(data);
+}
+useEffect(() => {
+  fetchRicePastaWrap();
+}, []);
+const riceItems = foodItems.filter(
+  (item) => item.section === "Rice Items"
+);
+
+const pastaItems = foodItems.filter(
+  (item) => item.section === "Pasta Items"
+);
+
+const wrapItems = foodItems.filter(
+  (item) => item.section === "Wrap Items"
+);
 
   return (
     <ScrollView
