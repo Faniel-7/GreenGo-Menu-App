@@ -5,6 +5,8 @@ import Svg, { Path } from "react-native-svg";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Dimensions } from "react-native";
+import { useEffect} from "react";
+import { supabase } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -16,26 +18,36 @@ const isDesktop = width >= 1200;
 
 const isLargeScreen = width >= 768;
 
-
-const saladItems = [
-  { name: "GREEN GO SPECIAL SALAD", price: "550" },
-  { name: "CHICKEN CAESAR SALAD", price: "500" },
-  { name: "TUNA SALAD", price: "450" },
-  { name: "GREEK SALAD", price: "400" },
-  { name: "GARDEN SALAD", price: "350" },
-];
-
-const soupItems = [
-  { name: "CHICKEN SOUP", price: "350" },
-  { name: "VEGETABLE SOUP", price: "300" },
-  { name: "CREAM SOUP", price: "350" },
-  { name: "LENTIL SOUP", price: "250" },
-  { name: "TOMATO SOUP", price: "300" },
-];
-
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams();
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+
+async function fetchSaladSoup() {
+  const { data, error } = await supabase
+    .from("category_items")
+    .select("*")
+    .eq("category_id", 9)
+    .eq("active", true)
+    .order("id");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  setMenuItems(data);
+}
+useEffect(() => {
+  fetchSaladSoup();
+}, []);
+const saladItems = menuItems.filter(
+  (item) => item.section === "Salad Items"
+);
+
+const soupItems = menuItems.filter(
+  (item) => item.section === "Soup Items"
+);
 
   return (
     <ScrollView
@@ -363,8 +375,8 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    color: "white",
-    fontSize: 18,
+    color: "#f4b400",
+    fontSize: 25,
     fontWeight: "900",
     fontFamily: "verdana",
     marginBottom: 15,
