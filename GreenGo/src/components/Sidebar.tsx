@@ -11,6 +11,8 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
 import { Dimensions } from "react-native";
+import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const { width } = Dimensions.get("window");
 
@@ -27,7 +29,6 @@ const icons: Record<string, keyof typeof Ionicons.glyphMap> = {
   "Burger & Sandwich": "fast-food",
 };
 
-const categories = Object.keys(icons);
 
 type SidebarProps = {
   visible: boolean;
@@ -50,6 +51,70 @@ export default function Sidebar({
     }).start();
   }, [visible]);
 
+  const [categories, setCategories] = useState<any[]>([]);
+  
+const fetchCategories = async () => {
+
+  const { data, error } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("active", true)
+    .order("id");
+
+  if (error) {
+    console.log("Category error:", error);
+    return;
+  }
+
+  setCategories(data);
+
+};
+useEffect(() => {
+  fetchCategories();
+}, []);
+
+const getCategoryIcon = (name: string): string => {
+  const categoryName = name.toLowerCase();
+
+  if (categoryName.includes("pizza")) {
+    return "🍕";
+  }
+
+  if (categoryName.includes("burger") || categoryName.includes("sandwich")) {
+    return "🍔";
+  }
+
+  if (categoryName.includes("hot") || categoryName.includes("coffee")) {
+    return "☕";
+  }
+
+  if (categoryName.includes("breakfast")) {
+    return "🍳";
+  }
+
+  if (categoryName.includes("salad") || categoryName.includes("soup")) {
+    return "🥗";
+  }
+
+  if (categoryName.includes("juice") || categoryName.includes("shake")) {
+    return "🥤";
+  }
+
+  if (
+    categoryName.includes("rice") ||
+    categoryName.includes("pasta") ||
+    categoryName.includes("wrap")
+  ) {
+    return "🍝";
+  }
+
+  if (categoryName.includes("chinese")) {
+    return "🥡";
+  }
+
+  return "🍽️";
+};
+
   if (!visible) return null;
 
   return (
@@ -71,46 +136,20 @@ export default function Sidebar({
   >
         <Text style={styles.logo}>GreenGo</Text>
 
-        {categories.map((category: string) => (
+        {categories.map((category: any) => (
           <TouchableOpacity
-            key={category}
+            key={category.name}
             style={styles.item}
             onPress={() => {
-              if (category === "Pizza") {
-                router.push("/menu/pizza" );
-              }
-              else if (category === "Burger & Sandwich") {
-                router.push("/menu/burger-and-sandwich" );
-              }
-              else if (category === "Chinese") {
-                router.push("/menu/chinese" as any);
-              }
-              else if (category === "Breakfast") {
-                router.push("/menu/breakfast" as any);
-              }
-              else if (category === "Salads & Soup") {
-                router.push("/menu/salads-and-soup" as any);
-              }
-              else if (category === "Hot Drinks") {
-                router.push("/menu/hot-drinks" as any);
-              }
-              else if (category === "Juices & Shakes") {
-                router.push("/menu/juice-and-soft-drinks" as any);
-              }
-              else if (category === "Rice, Pasta & Wrap") {
-                router.push("/menu/rice-pasta-wrap" as any);
-              }
-              onClose();
+              router.push(`/menu/${category.slug}` as any);
             }}
           >
-            <Ionicons
-              name={icons[category]}
-              size={32}
-              color="#2ecc71"
-            />
+            <Text style={{ fontSize: isLargeScreen ? 20 : 30}}>
+              {getCategoryIcon(category.name)}
+            </Text>
 
             <Text style={styles.text}>
-              {category}
+              {category.name}
             </Text>
           </TouchableOpacity>
         ))}
