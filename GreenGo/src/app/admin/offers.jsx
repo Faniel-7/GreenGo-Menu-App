@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
-
+import { formatLocalTime } from "../../utils/timeFormattter";
 import { useRouter } from "expo-router";
 
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -110,9 +110,6 @@ async function fetchTargetGroups(){
     await supabase
       .from("target_groups")
       .select("*");
-
-    console.log("Target groups fetched:", data);
-    console.log("Error fetching target groups:", error);
 
   if(error){
 
@@ -368,9 +365,7 @@ image_url:imageUrl,
 
 description_en:descriptionEn,
 
-description_am:descriptionAm,
-
-description_ti:descriptionTi,
+description_ti:descriptionLocal,
 
 discount_percentage:
 discountPercentage
@@ -379,9 +374,17 @@ Number(discountPercentage)
 :
 null,
 
-start_date:startDate,
+start_date:startDate.trim()
+?
+startDate
+:
+null,
 
-end_date:endDate,
+end_date:endDate.trim()
+?
+endDate
+:
+null,
 
 start_time:
 offerType==="happy_hour"
@@ -492,7 +495,7 @@ Alert.alert(
 
 
 
-router.back();
+router.push(`/admin/offers/${offer.id}`);
 
 
 
@@ -850,7 +853,7 @@ Offer Duration
 
 <TextInput
 style={styles.input}
-placeholder="Start Date"
+placeholder="Start Date(YYYY-MM-DD)"
 placeholderTextColor="#777"
 value={startDate}
 onChangeText={setStartDate}
@@ -858,7 +861,7 @@ onChangeText={setStartDate}
 
 <TextInput
 style={styles.input}
-placeholder="End Date"
+placeholder="End Date(YYYY-MM-DD)"
 placeholderTextColor="#777"
 value={endDate}
 onChangeText={setEndDate}
@@ -879,6 +882,7 @@ onValueChange={setActive}
 
 <TouchableOpacity
 style={styles.createButton}
+onPress={createOffer}
 >
 
 <Text style={styles.createText}>
