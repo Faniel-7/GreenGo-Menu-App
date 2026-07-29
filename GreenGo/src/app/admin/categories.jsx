@@ -86,8 +86,6 @@ export default function Categories() {
       )
       .order("id");
 
-      console.log("Categories fetched:", data);
-      console.log("Error fetching categories:", error);
 
       if(error)
         throw error;
@@ -136,10 +134,10 @@ export default function Categories() {
   function cardWidth(){
 
     if(isDesktop)
-      return "31%";
+      return "30%";
 
 
-    return "48%";
+    return "46%";
 
   }
 
