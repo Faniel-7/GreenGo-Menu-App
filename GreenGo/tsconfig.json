@@ -16,5 +16,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "src/components/admin/AdminBottomTabs.jsx", "src/app/admin/setting.jsx", "src/app/admin/promotion.jsx", "src/app/admin/menu.jsx", "src/app/admin/login.jsx", "src/app/admin/index.jsx", "src/app/admin/add-item.jsx"  ]
 }
