@@ -6,50 +6,80 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
+import {router, usePathname} from "expo-router";
 
 
-const menuItems = [
-  {
-    title:"Dashboard",
-    icon:"grid-outline"
-  },
-  {
-  title: "Categories",
-  icon: "category-outline",
-  route: "/admin/categories",
-},
-  {
-    title:"Menu",
-    icon:"restaurant-outline"
-  },
-  {
-    title:"Promotions",
-    icon:"megaphone-outline"
-  },
-  {
-    title:"Discounts",
-    icon:"pricetag-outline"
-  },
-  {
-    title:"Happy Hours",
-    icon:"time-outline"
-  },
-  {
-    title:"Seating",
-    icon:"apps-outline"
-  },
-  {
-    title:"Customers",
-    icon:"people-outline"
-  },
-  {
-    title:"Settings",
-    icon:"settings-outline"
-  }
-];
 
 
 export default function AdminSidebar(){
+
+  const [role,setRole] = useState("");
+  const pathname = usePathname();
+useEffect(()=>{
+
+fetchRole();
+
+},[]);
+
+async function fetchRole(){
+
+const {
+data:{user}
+}=await supabase.auth.getUser();
+
+
+const {data,error}=await supabase
+.from("admins")
+.select("role")
+.eq("user_id",user.id)
+.single();
+
+
+if(error){
+console.log(error);
+return;
+}
+
+
+setRole(data.role);
+
+}
+
+const menuItems = [
+{
+title:"Dashboard",
+icon:"grid-outline",
+route:"/admin/dashboard"
+},
+
+{
+title:"Categories",
+icon:"restaurant-outline",
+route:"/admin/categories"
+},
+
+{
+title:"Offers",
+icon:"gift-outline",
+route:"/admin/offers"
+},
+
+{
+title:"Settings",
+icon:"settings-outline",
+route:"/admin/settings"
+}
+];
+
+if (role === "Super Admin") {
+  menuItems.push({
+    title: "Admin Management",
+    icon: "people-outline",
+    route: "/admin/admins",
+  });
+}
 
 return(
 
@@ -72,7 +102,11 @@ menuItems.map((item,index)=>(
 
 <TouchableOpacity
 key={index}
-style={styles.menuItem}
+style={[
+  styles.menuItem,
+  pathname === item.route && styles.activeMenuItem,
+]}
+onPress={() => router.push(item.route)}
 >
 
 
@@ -83,7 +117,12 @@ color="#f4b400"
 />
 
 
-<Text style={styles.menuText}>
+<Text
+  style={[
+    styles.menuText,
+    pathname === item.route && styles.activeMenuText,
+  ]}
+>
 {item.title}
 </Text>
 
@@ -171,6 +210,18 @@ fontSize:16,
 
 fontWeight:"700",
 
-}
+},
+
+activeMenuItem: {
+  backgroundColor: "#1a1a1a",
+  borderLeftWidth: 4,
+  borderLeftColor: "#f4b400",
+  borderRadius: 10,
+  paddingHorizontal: 10,
+},
+
+activeMenuText: {
+  color: "#f4b400",
+},
 
 });
