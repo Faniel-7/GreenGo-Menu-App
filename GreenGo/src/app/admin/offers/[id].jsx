@@ -572,29 +572,38 @@ offer.active
                         const {error}=
 
                         await supabase
+.from("offer_items")
+.delete()
+.eq(
+"offer_id",
+offer.id
+);
 
-                        .from("offers")
 
-                        .delete()
-
-                        .eq("id",offer.id);
-
-
-
-                        if(error){
-
-                          Alert.alert(
-                            "Error",
-                            error.message
-                          );
-
-                          return;
-
-                        }
+await supabase
+.from("offer_target_groups")
+.delete()
+.eq(
+"offer_id",
+offer.id
+);
 
 
 
-                        router.back();
+
+if(error){
+
+Alert.alert(
+"Error",
+error.message
+);
+
+return;
+
+}
+
+
+router.back();
 
 
                       }
