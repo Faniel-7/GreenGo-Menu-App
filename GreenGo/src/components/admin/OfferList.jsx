@@ -18,7 +18,7 @@ import { useRouter } from "expo-router";
 
 import AdminLayout from "./AdminLayout";
 import AuthGuard from "./AuthGuard";
-
+import { formatOfferDate } from "../../utils/dateFormatter";
 import { supabase } from "../../lib/supabase";
 
 
@@ -133,7 +133,6 @@ export default function OffersList({
 
 async function deleteOffer(id){
 
-
   Alert.alert(
 
     "Delete Offer",
@@ -157,49 +156,54 @@ async function deleteOffer(id){
 
         onPress:async()=>{
 
+try{
 
-          try{
+console.log("Deleting offer with ID:", id);
+// delete selected menu items
+await supabase
+.from("offer_items")
+.delete()
+.eq("offer_id", id);
 
-
-            const {error}=
-
-            await supabase
-
-            .from("offers")
-
-            .delete()
-
-            .eq(
-              "id",
-              id
-            );
-
-
-
-            if(error)
-              throw error;
+console.log("Deleted offer items for offer ID:", id);
+// delete selected target groups
+await supabase
+.from("offer_target_groups")
+.delete()
+.eq("offer_id", id);
+console.log("Deleted offer target groups for offer ID:", id);
 
 
+// delete offer
+const {error}=await supabase
+.from("offers")
+.delete()
+.eq("id", id);
 
-            loadOffers();
+console.log("Deleted offer with ID:", id);
 
-
-
-          }
-
-          catch(error){
-
-
-            Alert.alert(
-              "Error",
-              error.message
-            );
+if(error)
+throw error;
 
 
-          }
+
+loadOffers();
 
 
-        }
+
+}
+
+catch(error){
+
+Alert.alert(
+"Delete Error",
+error.message
+);
+
+}
+
+
+}
 
 
       }
@@ -437,26 +441,23 @@ style={[
 {
 offer.image_url &&
 
+<View style={styles.offerImageWrapper}>
 
 <Image
-
 source={{
 uri:offer.image_url
 }}
-
 style={[
- styles.offerImage,
- {
-   height: width >= 768 ? 220 : 180
- }
+styles.offerImage,
+{
+height: width >= 768 ? 220 : 180
+}
 ]}
-
 />
 
+</View>
+
 }
-
-
-
 
 
 <View style={styles.offerContent}>
@@ -549,29 +550,16 @@ offer.type
 </Text>
 
 
-
-
-
-
-
-<Text style={styles.description}>
-
-
+<Text
+  style={styles.description}
+  numberOfLines={3}
+  ellipsizeMode="tail"
+>
 {
-
-offer.description_en ||
-
-"No description"
-
+  offer.description_en ||
+  "No description"
 }
-
-
-
 </Text>
-
-
-
-
 
 
 {
@@ -604,11 +592,8 @@ offer.start_date &&
 <Text style={styles.info}>
 
 
-📅 {offer.start_date}
-
-
-{offer.end_date ? ` - ${offer.end_date}` : ""}
-
+📅 {formatOfferDate(offer.start_date)}
+{offer.end_date ? ` - ${formatOfferDate(offer.end_date)}` : ""}
 
 
 </Text>
@@ -895,10 +880,16 @@ const styles = StyleSheet.create({
 
   offerImage:{
     width:"100%",
-
-    resizeMode:"cover",
+    backgroundColor:"#111",
+    resizeMode:"contain",
   },
 
+  offerImageWrapper:{
+    width:"100%",
+    backgroundColor:"#111",
+    justifyContent:"center",
+    alignItems:"center",
+  },
 
   offerContent:{
     padding:18,
@@ -968,12 +959,10 @@ const styles = StyleSheet.create({
 
   description:{
     color:"#bbb",
-
     marginTop:12,
-
-    lineHeight:22,
-
+    lineHeight:21,
     fontSize:15,
+    minHeight:63,
   },
 
 
