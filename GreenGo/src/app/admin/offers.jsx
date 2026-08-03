@@ -29,7 +29,7 @@ export default function CreateOffer() {
   const [offerType, setOfferType] =
     useState("happy_hour");
 
-
+  const [loading, setLoading] = useState(false);
 
   const [title, setTitle] = useState("");
 
@@ -91,6 +91,8 @@ export default function CreateOffer() {
 
   const [selectedItems,
     setSelectedItems] = useState([]);
+
+  const [itemDiscounts, setItemDiscounts] = useState({});
 
   // CATEGORY COLLAPSE
 
@@ -209,24 +211,31 @@ function toggleGroup(id){
 }
 function toggleItem(id){
 
-  if(selectedItems.includes(id)){
+if(selectedItems.includes(id)){
 
-    setSelectedItems(
+setSelectedItems(
+selectedItems.filter(
+item => item !== id
+)
+);
 
-      selectedItems.filter(
-        item => item !== id
-      )
+const updated = {...itemDiscounts};
+delete updated[id];
+setItemDiscounts(updated);
 
-    );
+}else{
 
-  }else{
+setSelectedItems([
+...selectedItems,
+id
+]);
 
-    setSelectedItems([
-      ...selectedItems,
-      id
-    ]);
+setItemDiscounts({
+...itemDiscounts,
+[id]:""
+});
 
-  }
+}
 
 }
 
@@ -270,6 +279,10 @@ async function uploadImage(uri){
 
 }
 async function createOffer(){
+
+if(loading)
+return;
+setLoading(true);
 
 if(!title.trim()){
 
@@ -420,13 +433,18 @@ throw offerError;
 if(selectedItems.length){
 
 
-const itemsInsert =
+const itemsInsert = selectedItems.map(item => ({
 
-selectedItems.map(item=>({
+offer_id: offer.id,
 
-offer_id:offer.id,
+item_id: item,
 
-item_id:item
+discount_percentage:
+itemDiscounts[item]
+?
+Number(itemDiscounts[item])
+:
+null
 
 }));
 
@@ -490,12 +508,16 @@ throw groupError;
 
 Alert.alert(
 "Success",
-"Offer created"
+"Offer created successfully",
+[
+{
+text:"OK",
+onPress:()=>router.replace(
+`/admin/offers/${offer.id}`
+)
+}
+]
 );
-
-
-
-router.push(`/admin/offers/${offer.id}`);
 
 
 
@@ -503,19 +525,19 @@ router.push(`/admin/offers/${offer.id}`);
 
 catch(error){
 
-
 console.log(error);
-
 
 Alert.alert(
 "Error",
 error.message
 );
 
+}
+finally{
+
+setLoading(false);
 
 }
-
-
 
 }
 
@@ -752,19 +774,33 @@ onPress={()=>toggleCategory(category)}
 
 {menuItems
 .filter(
-item=>
-item.categories?.name===category
+item =>
+item.categories?.name === category
 )
-.map(item=>(
+.map(item => (
 
-<TouchableOpacity
+<View
 key={item.id}
 style={styles.checkboxRow}
+>
+
+<TouchableOpacity
+style={{
+flexDirection:"row",
+alignItems:"center",
+flex:1
+}}
 onPress={()=>toggleItem(item.id)}
 >
 
 <Text style={styles.checkbox}>
-{selectedItems.includes(item.id) ? "☑" : "☐"}
+{
+selectedItems.includes(item.id)
+?
+"☑️"
+:
+"☐"
+}
 </Text>
 
 <Text style={styles.checkboxText}>
@@ -772,6 +808,32 @@ onPress={()=>toggleItem(item.id)}
 </Text>
 
 </TouchableOpacity>
+
+
+{
+selectedItems.includes(item.id) && (
+
+<TextInput
+style={styles.discountInput}
+placeholder="%"
+placeholderTextColor="#777"
+keyboardType="numeric"
+value={itemDiscounts[item.id] || ""}
+onChangeText={(value)=>
+
+setItemDiscounts({
+...itemDiscounts,
+[item.id]:value
+})
+
+}
+/>
+
+)
+
+}
+
+</View>
 
 ))}
 
@@ -881,12 +943,22 @@ onValueChange={setActive}
 </View>
 
 <TouchableOpacity
-style={styles.createButton}
+style={[
+styles.createButton,
+loading && {opacity:0.6}
+]}
 onPress={createOffer}
+disabled={loading}
 >
 
 <Text style={styles.createText}>
-CREATE OFFER
+{
+loading
+?
+"CREATING..."
+:
+"CREATE OFFER"
+}
 </Text>
 
 </TouchableOpacity>
@@ -1199,6 +1271,17 @@ borderRadius:30
 addGroupText:{
 color:"#f4b400",
 fontWeight:"900"
+},
+
+discountInput:{
+backgroundColor:"#222",
+color:"white",
+width:70,
+height:40,
+borderRadius:8,
+paddingHorizontal:10,
+textAlign:"center",
+marginLeft:10
 },
 
 });
