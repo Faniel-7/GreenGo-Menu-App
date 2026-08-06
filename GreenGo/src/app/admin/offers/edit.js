@@ -93,6 +93,8 @@ export default function CreateOffer() {
   const [selectedItems,
     setSelectedItems] = useState([]);
 
+  const [itemDiscounts, setItemDiscounts] = useState({});
+
   // CATEGORY COLLAPSE
 
   const [expandedCategories,
@@ -192,13 +194,25 @@ if (groups) {
 
 const { data: items } = await supabase
   .from("offer_items")
-  .select("item_id")
+  .select("item_id, discount_percentage")
   .eq("offer_id", id);
 
 if (items) {
+
   setSelectedItems(
     items.map(item => item.item_id)
   );
+
+  const discounts = {};
+
+  items.forEach(item => {
+    discounts[item.item_id] =
+      item.discount_percentage
+        ? String(item.discount_percentage)
+        : "";
+  });
+
+  setItemDiscounts(discounts);
 }
 
   if (data.image_url) {
@@ -393,9 +407,13 @@ await supabase
 if (selectedItems.length) {
 
   const itemsInsert = selectedItems.map(item => ({
-    offer_id: id,
-    item_id: item
-  }));
+  offer_id: id,
+  item_id: item,
+  discount_percentage:
+    itemDiscounts[item]
+      ? Number(itemDiscounts[item])
+      : null,
+}));
 
   const { error: itemError } =
     await supabase
@@ -950,29 +968,58 @@ onPress={()=>toggleCategory(category)}
 <View>
 
 {menuItems
-.filter(
-item=>
-item.categories?.name===category
-)
-.map(item=>(
+  .filter(item => item.categories?.name === category)
+  .map(item => {
 
-<TouchableOpacity
-key={item.id}
-style={styles.checkboxRow}
-onPress={()=>toggleItem(item.id)}
->
+    const selected = selectedItems.includes(item.id);
 
-<Text style={styles.checkbox}>
-{selectedItems.includes(item.id) ? "☑" : "☐"}
-</Text>
+    return (
 
-<Text style={styles.checkboxText}>
-{item.name}
-</Text>
+      <View key={item.id}>
 
-</TouchableOpacity>
+        <TouchableOpacity
+          style={styles.checkboxRow}
+          onPress={() => toggleItem(item.id)}
+        >
+          <Text style={styles.checkbox}>
+            {selected ? "☑️" : "☐"}
+          </Text>
 
-))}
+          <Text style={styles.checkboxText}>
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+
+        {selected && (
+
+          <TextInput
+            style={{
+              backgroundColor:"#1b1b1b",
+              color:"white",
+              marginHorizontal:15,
+              marginBottom:10,
+              borderRadius:8,
+              padding:10,
+            }}
+            placeholder="Discount %"
+            placeholderTextColor="#777"
+            keyboardType="numeric"
+            value={itemDiscounts[item.id] || ""}
+            onChangeText={(text)=>
+              setItemDiscounts({
+                ...itemDiscounts,
+                [item.id]: text
+              })
+            }
+          />
+
+        )}
+
+      </View>
+
+    );
+
+})}
 
 </View>
 
