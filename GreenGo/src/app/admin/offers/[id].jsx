@@ -96,21 +96,33 @@ if (groups) {
 }
 
 const { data: items } = await supabase
-  .from("offer_items")
-  .select("item_id")
+  .from("offer_menu_items")
+  .select(
+    menu_item_id,
+    discount_percentage
+  )
   .eq("offer_id", id);
 
 if (items) {
-
-  const ids = items.map(i => i.item_id);
+  const ids = items.map(i => i.menu_item_id);
 
   const { data: names } = await supabase
     .from("category_items")
     .select("id,name")
     .in("id", ids);
 
-  setOfferItems(names || []);
+  const merged = names.map(item => {
+    const match = items.find(
+      i => i.menu_item_id === item.id
+    );
 
+    return {
+      ...item,
+      discount_percentage: match?.discount_percentage ?? 0,
+    };
+  });
+
+  setOfferItems(merged);
 }
 
 
@@ -393,17 +405,37 @@ No menu items
 
 offerItems.map(item => (
 
-<View key={item.id} style={styles.tagCard}>
+  <View
+    key={item.id}
+    style={styles.tagCard}
+  >
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        flex: 1,
+      }}
+    >
+      <View style={styles.tagIcon}>
+        <Text style={styles.tagEmoji}>🍽</Text>
+      </View>
 
-  <View style={styles.tagIcon}>
-    <Text style={styles.tagEmoji}>🍽</Text>
+      <Text style={styles.tagName}>
+        {item.name}
+      </Text>
+    </View>
+
+    <Text
+      style={{
+        color: "#f4b400",
+        fontWeight: "900",
+        fontSize: 15,
+      }}
+    >
+      {item.discount_percentage}% OFF
+    </Text>
+
   </View>
-
-  <Text style={styles.tagName}>
-    {item.name}
-  </Text>
-
-</View>
 
 ))
 
