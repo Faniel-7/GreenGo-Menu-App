@@ -99,6 +99,8 @@ export default function CreateOffer() {
   const [expandedCategories,
     setExpandedCategories] = useState({});
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
 
     fetchTargetGroups();
