@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   View,
@@ -81,6 +82,7 @@ export default function Categories() {
         id,
         name,
         active,
+        icon,
         category_images(image_url),
         category_items(id)`
       )
@@ -197,28 +199,24 @@ export default function Categories() {
 
                   >
 
-
-                    {
-                      category.category_images?.[0]?.image_url ?
-
-                      <Image
-
-                        source={{
-                          uri:
-                          category.category_images[0].image_url
-                        }}
-
-                        style={styles.image}
-
-                      />
-
-                      :
-
-                      <Text style={styles.icon}>
-                        {getCategoryIcon(category.name)}
-                        </Text>
-
-                    }
+{category.icon ? (
+  <Ionicons
+    name={category.icon}
+    size={50}
+    color="#f4b400"
+  />
+) : category.category_images?.[0]?.image_url ? (
+  <Image
+    source={{
+      uri: category.category_images[0].image_url,
+    }}
+    style={styles.image}
+  />
+) : (
+  <Text style={styles.icon}>
+    {getCategoryIcon(category.name)}
+  </Text>
+)}
 
 
 
