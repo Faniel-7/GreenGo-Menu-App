@@ -304,6 +304,7 @@ export default function CreateCategory() {
           slug: slug,
           active: active,
           menu_type: menuType,
+          icon: "restaurant-outline",
         })
         .select()
         .single();
