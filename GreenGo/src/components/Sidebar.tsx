@@ -14,6 +14,7 @@ import { Dimensions } from "react-native";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 
+
 const { width } = Dimensions.get("window");
 
 const isLargeScreen = width >= 768;
@@ -69,9 +70,11 @@ const fetchCategories = async () => {
   setCategories(data);
 
 };
+
 useEffect(() => {
-  fetchCategories();
+    fetchCategories();
 }, []);
+
 
 const getCategoryIcon = (name: string): string => {
   const categoryName = name.toLowerCase();
