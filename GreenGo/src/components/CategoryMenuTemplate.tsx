@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-
+import {useFocusEffect} from "expo-router";
 import Sidebar from "./Sidebar";
 
 const { width, height } = Dimensions.get("window");
@@ -45,6 +45,13 @@ export default function CategoryMenuTemplate({
 }: CategoryMenuTemplateProps) {
   const [sidebarVisible, setSidebarVisible] =
     React.useState(false);
+  const [sidebarKey, setSidebarKey] = React.useState(0);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSidebarKey((value) => value + 1);
+    }, [])
+  );
 
   const isPizza =
     categoryName.toLowerCase() === "pizza";
@@ -82,11 +89,14 @@ export default function CategoryMenuTemplate({
           </TouchableOpacity>
 
           <Sidebar
-            visible={sidebarVisible}
-            onClose={() =>
-              setSidebarVisible(false)
-            }
-          />
+  key={sidebarKey}
+  visible={
+    isLargeScreen
+      ? true
+      : sidebarVisible
+  }
+  onClose={() => setSidebarVisible(false)}
+/>
         </>
       ) : (
         <View style={styles.desktopSidebar}>
