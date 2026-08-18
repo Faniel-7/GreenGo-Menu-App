@@ -8,6 +8,8 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  Switch,
+  Alert,
 } from "react-native";
 
 import { useRouter } from "expo-router";
@@ -68,7 +70,48 @@ export default function Categories() {
 
   const [loading, setLoading] = useState(true);
 
+  async function toggleCategory(
+  category
+) {
+  const newStatus = !category.active;
 
+  try {
+    // Update the database
+    const { error } = await supabase
+      .from("categories")
+      .update({
+        active: newStatus,
+      })
+      .eq("id", category.id);
+
+    if (error) {
+      throw error;
+    }
+
+    // Update the screen immediately
+    setCategories((current) =>
+      current.map((item) =>
+        item.id === category.id
+          ? {
+              ...item,
+              active: newStatus,
+            }
+          : item
+      )
+    );
+
+  } catch (error) {
+    console.log(
+      "Category active error:",
+      error
+    );
+
+    Alert.alert(
+      "Error",
+      "Could not change category status."
+    );
+  }
+}
 
   async function fetchCategories(){
 
@@ -183,80 +226,91 @@ export default function Categories() {
                 categories.map((category)=>(
 
 
-                  <TouchableOpacity
+                  <View
+  key={category.id}
+  style={[
+    styles.card,
+    {
+      width: cardWidth(),
+    },
+  ]}
+>
 
-                    key={category.id}
+  <TouchableOpacity
+    style={styles.categoryContent}
+    onPress={() => openCategory(category.id)}
+    activeOpacity={0.85}
+  >
 
-                    style={[
-                      styles.card,
-                      {
-                        width:cardWidth()
-                      }
-                    ]}
+    {
+      category.category_images?.[0]?.image_url ?
 
+      <Image
+        source={{
+          uri:
+            category.category_images[0].image_url,
+        }}
+        style={styles.image}
+      />
 
-                    onPress={()=>openCategory(category.id)}
+      :
 
-                  >
-
-{category.icon ? (
-  <Ionicons
-    name={category.icon}
-    size={50}
-    color="#f4b400"
-  />
-) : category.category_images?.[0]?.image_url ? (
-  <Image
-    source={{
-      uri: category.category_images[0].image_url,
-    }}
-    style={styles.image}
-  />
-) : (
-  <Text style={styles.icon}>
-    {getCategoryIcon(category.name)}
-  </Text>
-)}
-
+      <Text style={styles.icon}>
+        {getCategoryIcon(category.name)}
+      </Text>
+    }
 
 
-                    <Text style={styles.name}>
-                      {category.name}
-                    </Text>
+    <Text style={styles.name}>
+      {category.name}
+    </Text>
 
 
+    <Text style={styles.items}>
+      {
+        category.category_items?.length || 0
+      }
+      {" "}items
+    </Text>
 
-                    <Text style={styles.items}>
-                      {
-                        category.category_items?.length || 0
-                      }
-                      {" "}items
-                    </Text>
-
-
-
-                    <Text
-                      style={[
-                        styles.status,
-                        {
-                          color:
-                          category.active
-                          ? "#00ff88"
-                          : "#ff5555"
-                        }
-                      ]}
-                    >
-
-                      {
-                        category.active
-                        ? "🟢 Active"
-                        : "🔴 Hidden"
-                      }
-
-                    </Text>
+  </TouchableOpacity>
 
 
-                  </TouchableOpacity>
+  {/* CATEGORY ACTIVE SWITCH */}
+
+  <View style={styles.statusRow}>
+
+    <Text
+      style={[
+        styles.status,
+        {
+          color: category.active
+            ? "#f4b400"
+            : "#777",
+        },
+      ]}
+    >
+      {category.active
+        ? "Active"
+        : "Hidden"}
+    </Text>
+
+
+    <Switch
+      value={category.active}
+      onValueChange={() =>
+        toggleCategory(category)
+      }
+      trackColor={{
+        false: "#333",
+        true: "#f4b400",
+      }}
+      thumbColor="#fff"
+    />
+
+  </View>
+
+</View>
 
 
                 ))
@@ -333,7 +387,31 @@ padding:20,
 
 },
 
+statusRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: 8,
+  gap: 8,
+},
 
+categoryContent: {
+  width: "100%",
+  alignItems: "center",
+  flex: 1,
+  justifyContent: "center",
+},
+
+statusRow: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: 8,
+},
+
+status: {
+  fontWeight: "700",
+  marginRight: 8,
+},
 
 title:{
 
@@ -427,7 +505,7 @@ marginTop:5,
 
 status:{
 
-marginTop:8,
+marginRight:15,
 
 fontWeight:"700",
 
