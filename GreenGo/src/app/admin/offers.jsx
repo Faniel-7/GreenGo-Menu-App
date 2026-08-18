@@ -241,6 +241,55 @@ setItemDiscounts({
 
 }
 
+async function addTargetGroup(){
+
+if(!newGroupName.trim()){
+
+Alert.alert(
+"Error",
+"Enter target group name"
+);
+
+return;
+
+}
+
+
+const {data,error}=
+
+await supabase
+.from("target_groups")
+.insert({
+name:newGroupName
+})
+.select()
+.single();
+
+
+if(error){
+
+Alert.alert(
+"Error",
+error.message
+);
+
+return;
+
+}
+
+
+setTargetGroups([
+...targetGroups,
+data
+]);
+
+
+setNewGroupName("");
+
+setShowGroupModal(false);
+
+}
+
 async function uploadImage(uri){
 
   const response = await fetch(uri);
@@ -293,55 +342,6 @@ Alert.alert(
 "Offer title required"
 );
 
-async function addTargetGroup(){
-
-if(!newGroupName.trim()){
-
-Alert.alert(
-"Error",
-"Enter target group name"
-);
-
-return;
-
-}
-
-
-const {data,error}=
-
-await supabase
-.from("target_groups")
-.insert({
-name:newGroupName
-})
-.select()
-.single();
-
-
-if(error){
-
-Alert.alert(
-"Error",
-error.message
-);
-
-return;
-
-}
-
-
-setTargetGroups([
-...targetGroups,
-data
-]);
-
-
-setNewGroupName("");
-
-setShowGroupModal(false);
-
-}
-
 return;
 
 }
@@ -382,12 +382,6 @@ description_en:descriptionEn,
 
 description_ti:descriptionLocal,
 
-discount_percentage:
-discountPercentage
-?
-Number(discountPercentage)
-:
-null,
 
 start_date:startDate.trim()
 ?
@@ -857,14 +851,7 @@ setItemDiscounts({
 Happy Hour
 </Text>
 
-<TextInput
-style={styles.input}
-placeholder="Discount %"
-placeholderTextColor="#777"
-keyboardType="numeric"
-value={discountPercentage}
-onChangeText={setDiscountPercentage}
-/>
+
 
 <TextInput
 style={styles.input}
@@ -885,18 +872,6 @@ onChangeText={setEndTime}
 
 )}
 
-{offerType==="discount"&&(
-
-<TextInput
-style={styles.input}
-placeholder="Discount %"
-placeholderTextColor="#777"
-keyboardType="numeric"
-value={discountPercentage}
-onChangeText={setDiscountPercentage}
-/>
-
-)}
 
 {offerType==="promotion"&&(
 
