@@ -9,6 +9,8 @@ import {
   Image,
   Alert,
   Switch,
+  Modal,
+  Platform,
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -89,6 +91,9 @@ export default function CreateOffer() {
   const [menuItems,
     setMenuItems] = useState([]);
 
+  const [menuCategories,
+    setMenuCategories] = useState([]);
+
   const [selectedItems,
     setSelectedItems] = useState([]);
 
@@ -104,8 +109,8 @@ export default function CreateOffer() {
   useEffect(() => {
 
     fetchTargetGroups();
-
     fetchMenuItems();
+    fetchMenuCategories();
 
   }, []);
 async function fetchTargetGroups(){
@@ -151,6 +156,36 @@ async function fetchMenuItems(){
   setMenuItems(data);
 
 }
+
+async function fetchMenuCategories() {
+
+  const { data, error } =
+    await supabase
+      .from("categories")
+      .select(`
+        id,
+        name,
+        active`
+      )
+      .eq("active", true)
+      .order("id", {
+        ascending: true,
+      });
+
+  if (error) {
+
+    console.log(
+      "Menu categories error:",
+      error
+    );
+
+    return;
+  }
+
+  setMenuCategories(data || []);
+}  
+
+
 async function pickImage(){
 
   const result =
@@ -241,53 +276,82 @@ setItemDiscounts({
 
 }
 
-async function addTargetGroup(){
+async function addTargetGroup() {
+  const groupName = newGroupName.trim();
 
-if(!newGroupName.trim()){
+  if (!groupName) {
+    Alert.alert(
+      "Error",
+      "Enter target group name"
+    );
+    return;
+  }
 
-Alert.alert(
-"Error",
-"Enter target group name"
-);
+  try {
+    console.log(
+      "Creating target group:",
+      groupName
+    );
 
-return;
+    const { data, error } = await supabase
+      .from("target_groups")
+      .insert({
+        name: groupName,
+      })
+      .select("*")
+      .single();
 
-}
+    if (error) {
+      console.log(
+        "TARGET GROUP INSERT ERROR:",
+        error
+      );
 
+      Alert.alert(
+        "Target Group Error",
+        error.message
+      );
 
-const {data,error}=
+      return;
+    }
 
-await supabase
-.from("target_groups")
-.insert({
-name:newGroupName
-})
-.select()
-.single();
+    if (!data) {
+      Alert.alert(
+        "Error",
+        "Target group was not created."
+      );
+      return;
+    }
 
+    console.log(
+      "TARGET GROUP CREATED:",
+      data
+    );
 
-if(error){
+    setTargetGroups((current) => [
+      ...current,
+      data,
+    ]);
 
-Alert.alert(
-"Error",
-error.message
-);
+    setSelectedGroups((current) => [
+      ...current,
+      data.id,
+    ]);
 
-return;
+    setNewGroupName("");
+    setShowGroupModal(false);
 
-}
+  } catch (error) {
+    console.log(
+      "TARGET GROUP ERROR:",
+      error
+    );
 
-
-setTargetGroups([
-...targetGroups,
-data
-]);
-
-
-setNewGroupName("");
-
-setShowGroupModal(false);
-
+    Alert.alert(
+      "Error",
+      "Something went wrong while creating the target group."
+    );
+  }
 }
 
 async function uploadImage(uri){
@@ -715,13 +779,16 @@ selectedGroups.includes(group.id)
 
 
 <TouchableOpacity
-onPress={()=>setShowGroupModal(true)}
+  style={styles.addGroupButton}
+  onPress={() => {
+    console.log("Add Target Group pressed");
+    setShowGroupModal(true);
+  }}
+  activeOpacity={0.7}
 >
-
-<Text style={styles.addGroupText}>
-+ Add Target Group
-</Text>
-
+  <Text style={styles.addGroupText}>
+    + Add Target Group
+  </Text>
 </TouchableOpacity>
 
 
@@ -733,45 +800,36 @@ Menu Items
 
 <View style={styles.categoryGrid}>
 
-{[
-"Pizza",
-"Burger and Sandwich",
-"Hot Drinks",
-"Breakfast",
-"Salad and Soup",
-"Juice and Shakes",
-"Rice, Pasta and Wrap",
-"Chinese"
-].map(category=>(
+{menuCategories.map((category)=>(
 
 <View
-key={category}
+key={category.id}
 style={styles.categoryCard}
 >
 
 <TouchableOpacity
 style={styles.categoryHeader}
-onPress={()=>toggleCategory(category)}
+onPress={()=>toggleCategory(category.name)}
 >
 
 <Text style={styles.categoryName}>
-{category}
+{category.name}
 </Text>
 
 <Text style={styles.arrow}>
-{expandedCategories[category] ? "▼" : "▲"}
+{expandedCategories[category.name] ? "▼" : "▲"}
 </Text>
 
 </TouchableOpacity>
 
-{expandedCategories[category]&&(
+{expandedCategories[category.name]&&(
 
 <View>
 
 {menuItems
 .filter(
 item =>
-item.categories?.name === category
+item.category_id === category.id
 )
 .map(item => (
 
@@ -853,20 +911,47 @@ Happy Hour
 
 
 
-<TextInput
-style={styles.input}
-placeholder="Start Time (4:00 PM)"
-placeholderTextColor="#777"
-value={startTime}
-onChangeText={setStartTime}
+<Text style={styles.dateLabel}>
+  Start Time
+</Text>
+
+<input
+  type="time"
+  value={startTime}
+  onChange={(event) =>
+    setStartTime(event.target.value)
+  }
+  style={styles.webDateInput}
 />
-<TextInput
-style={styles.input}
-placeholder="End Time (6:00 PM)"
-placeholderTextColor="#777"
-value={endTime}
-onChangeText={setEndTime}
+
+{startTime ? (
+  <Text style={styles.selectedTimeText}>
+    {formatLocalTime(startTime)}
+  </Text>
+) : null}
+
+<Text style={styles.dateLabel}>
+  End Time
+</Text>
+
+<input
+  type="time"
+  value={endTime}
+  onChange={(event) =>
+    setEndTime(event.target.value)
+  }
+  style={styles.webDateInput}
 />
+
+{endTime ? (
+  <Text style={styles.selectedTimeText}>
+    {formatLocalTime(endTime)}
+  </Text>
+) : null}
+
+<Text style={styles.localTimeHint}>
+  Local Time (LT)
+</Text>
 
 </>
 
@@ -890,21 +975,46 @@ multiline
 Offer Duration
 </Text>
 
-<TextInput
-style={styles.input}
-placeholder="Start Date(YYYY-MM-DD)"
-placeholderTextColor="#777"
-value={startDate}
-onChangeText={setStartDate}
-/>
+{Platform.OS === "web" ? (
+  <View style={styles.dateInputWrapper}>
+    <Text style={styles.dateLabel}>
+      Start Date
+    </Text>
 
-<TextInput
-style={styles.input}
-placeholder="End Date(YYYY-MM-DD)"
-placeholderTextColor="#777"
-value={endDate}
-onChangeText={setEndDate}
-/>
+    <input
+      type="date"
+      value={startDate}
+      onChange={(event) =>
+        setStartDate(event.target.value)
+      }
+      style={styles.webDateInput}
+    />
+  </View>
+) : (
+  <TextInput
+    style={styles.input}
+    placeholder="Start Date (YYYY-MM-DD)"
+    placeholderTextColor="#777"
+    value={startDate}
+    onChangeText={setStartDate}
+  />
+)}
+
+<View style={styles.dateInputWrapper}>
+  <Text style={styles.dateLabel}>
+    End Date
+  </Text>
+
+  <input
+    type="date"
+    value={endDate}
+    min={startDate || undefined}
+    onChange={(event) =>
+      setEndDate(event.target.value)
+    }
+    style={styles.webDateInput}
+  />
+</View>
 
 <View style={styles.switchRow}>
 
@@ -939,77 +1049,59 @@ loading
 </Text>
 
 </TouchableOpacity>
-{showGroupModal && (
-
-<View style={styles.modalOverlay}>
-
-
-<View style={styles.modalBox}>
-
-
-<Text style={styles.modalTitle}>
-Add Target Group
-</Text>
-
-
-<TextInput
-
-style={styles.input}
-
-placeholder="Group name"
-
-placeholderTextColor="#777"
-
-value={newGroupName}
-
-onChangeText={setNewGroupName}
-
-/>
-
-
-<View style={styles.modalButtons}>
-
-
-<TouchableOpacity
-
-style={styles.cancelButton}
-
-onPress={()=>setShowGroupModal(false)}
-
+<Modal
+  visible={showGroupModal}
+  transparent
+  animationType="fade"
+  onRequestClose={() =>
+    setShowGroupModal(false)
+  }
 >
+  <View style={styles.modalOverlay}>
 
-<Text style={styles.cancelText}>
-Cancel
-</Text>
+    <View style={styles.modalBox}>
 
-</TouchableOpacity>
+      <Text style={styles.modalTitle}>
+        Add Target Group
+      </Text>
 
+      <TextInput
+        style={styles.input}
+        placeholder="Group name"
+        placeholderTextColor="#777"
+        value={newGroupName}
+        onChangeText={setNewGroupName}
+        autoFocus
+      />
 
+      <View style={styles.modalButtons}>
 
-<TouchableOpacity
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={() =>
+            setShowGroupModal(false)
+          }
+        >
+          <Text style={styles.cancelText}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
 
-style={styles.saveButton}
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={addTargetGroup}
+        >
+          <Text style={styles.saveText}>
+            Save
+          </Text>
+        </TouchableOpacity>
 
-onPress={addTargetGroup}
+      </View>
 
->
+    </View>
 
-<Text style={styles.saveText}>
-Save
-</Text>
-
-</TouchableOpacity>
-
-
-</View>
-
-
-</View>
-
-
-</View>
-
-)}
+  </View>
+</Modal>
 
 </ScrollView>
 
@@ -1259,6 +1351,93 @@ borderRadius:8,
 paddingHorizontal:10,
 textAlign:"center",
 marginLeft:10
+},
+
+modalOverlay: {
+  flex: 1,
+  backgroundColor: "rgba(0,0,0,0.75)",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: 20,
+},
+
+modalBox: {
+  width: "100%",
+  maxWidth: 500,
+  backgroundColor: "#111",
+  borderRadius: 18,
+  padding: 25,
+  borderWidth: 1,
+  borderColor: "#333",
+},
+
+modalTitle: {
+  color: "#f4b400",
+  fontSize: 24,
+  fontWeight: "900",
+  marginBottom: 20,
+},
+
+modalButtons: {
+  flexDirection: "row",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  marginTop: 10,
+  gap: 12,
+},
+
+cancelButton: {
+  paddingVertical: 12,
+  paddingHorizontal: 20,
+  borderRadius: 10,
+  backgroundColor: "#222",
+},
+
+cancelText: {
+  color: "#fff",
+  fontWeight: "800",
+},
+
+saveButton: {
+  paddingVertical: 12,
+  paddingHorizontal: 22,
+  borderRadius: 10,
+  backgroundColor: "#f4b400",
+},
+
+saveText: {
+  color: "#000",
+  fontWeight: "900",
+},
+
+dateInputWrapper: {
+  marginBottom: 15,
+},
+
+dateLabel: {
+  color: "#aaa",
+  fontSize: 14,
+  fontWeight: "700",
+  marginBottom: 8,
+},
+
+webDateInput: {
+  width: "100%",
+  boxSizing: "border-box",
+  backgroundColor: "#111",
+  color: "#fff",
+  border: "1px solid #333",
+  borderRadius: 12,
+  padding: 15,
+  fontSize: 16,
+},
+
+localTimeHint: {
+  color: "#888",
+  fontSize: 12,
+  fontWeight: "700",
+  marginTop: 4,
+  marginBottom: 8,
 },
 
 });
