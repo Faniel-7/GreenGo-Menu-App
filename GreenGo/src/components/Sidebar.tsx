@@ -53,6 +53,7 @@ export default function Sidebar({
   }, [visible]);
 
   const [categories, setCategories] = useState<any[]>([]);
+  const [offers, setOffers] = useState<any[]>([]);
   
 const fetchCategories = async () => {
 
@@ -71,8 +72,26 @@ const fetchCategories = async () => {
 
 };
 
+
+const fetchOffers = async () => {
+  const { data, error } = await supabase
+    .from("offers")
+    .select("id, title, type, image_url, active, start_date, end_date")
+    .eq("active", true)
+    .order("id", { ascending: false });
+
+  if (error) {
+    console.log("Offer error:", error);
+    return;
+  }
+
+  setOffers(data || []);
+};
+
+
 useEffect(() => {
     fetchCategories();
+    fetchOffers();
 }, []);
 
 
@@ -156,6 +175,37 @@ const getCategoryIcon = (name: string): string => {
             </Text>
           </TouchableOpacity>
         ))}
+
+        {offers.length > 0 && (
+  <View style={styles.offerSection}>
+    <View style={styles.offerDivider} />
+
+    <Text style={styles.offerSectionTitle}>
+      ✨ OFFERS
+    </Text>
+
+    <TouchableOpacity
+      style={styles.offerMenuItem}
+      onPress={() => {
+        onClose();
+        router.push("/menu/offers" as any);
+      }}
+    >
+      <Text style={styles.offerIcon}>
+        🎁
+      </Text>
+
+      <Text style={styles.offerMenuText}>
+        Special Offers
+      </Text>
+
+      <Text style={styles.offerCount}>
+        {offers.length}
+      </Text>
+    </TouchableOpacity>
+  </View>
+)}
+
       </ScrollView>
       </Animated.View>
     </TouchableOpacity>
@@ -200,4 +250,55 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     marginLeft: 18,
   },
+
+  offerSection: {
+  marginTop: 10,
+  paddingBottom: 30,
+},
+
+offerDivider: {
+  height: 1,
+  backgroundColor: "rgba(244,180,0,0.25)",
+  marginBottom: 22,
+},
+
+offerSectionTitle: {
+  color: "#f4b400",
+  fontSize: 14,
+  fontWeight: "900",
+  letterSpacing: 1.5,
+  marginBottom: 8,
+},
+
+offerMenuItem: {
+  flexDirection: "row",
+  alignItems: "center",
+  paddingVertical: 18,
+},
+
+offerIcon: {
+  fontSize: isLargeScreen ? 20 : 28,
+},
+
+offerMenuText: {
+  flex: 1,
+  color: "#fff",
+  fontSize: isLargeScreen ? 18 : 22,
+  fontWeight: "900",
+  marginLeft: 18,
+},
+
+offerCount: {
+  color: "#000",
+  backgroundColor: "#f4b400",
+  minWidth: 26,
+  height: 26,
+  borderRadius: 13,
+  textAlign: "center",
+  textAlignVertical: "center",
+  fontSize: 13,
+  fontWeight: "900",
+  overflow: "hidden",
+},
+
 });
