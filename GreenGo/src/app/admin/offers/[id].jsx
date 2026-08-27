@@ -74,55 +74,111 @@ export default function OfferDetails(){
 
       setOffer(data);
       
-  
-      const client = supabase;
-
-const { data: groups } = await supabase
+    // Load target groups
+const {
+  data: groups,
+  error: groupsError
+} = await supabase
   .from("offer_target_groups")
   .select("target_group_id")
   .eq("offer_id", id);
 
-if (groups) {
+console.log("OFFER TARGET GROUPS:", groups);
+console.log("TARGET GROUP ERROR:", groupsError);
 
-  const ids = groups.map(g => g.target_group_id);
+if (groupsError) {
+  throw groupsError;
+}
 
-  const { data: names } = await supabase
-    .from("target_groups")
-    .select("id,name")
-    .in("id", ids);
+if (groups && groups.length > 0) {
+
+  const ids = groups.map(
+    group => group.target_group_id
+  );
+
+  const { data: names, error: namesError } = await supabase
+  .from("target_groups")
+  .select("id, name")
+  .in("id", ids);
+
+console.log("TARGET GROUP IDS:", ids);
+console.log("TARGET GROUP RECORDS:", names);
+console.log("TARGET GROUP LOOKUP ERROR:", namesError);
+
+setOfferGroups(names || []);
+
+
+  if (namesError) {
+    throw namesError;
+  }
 
   setOfferGroups(names || []);
 
+} else {
+
+  setOfferGroups([]);
+
 }
 
-const { data: items } = await supabase
-  .from("offer_menu_items")
-  .select(
-    menu_item_id,
-    discount_percentage
-  )
+
+// Load selected menu items
+const {
+  data: items,
+  error: itemsError
+} = await supabase
+  .from("offer_items")
+  .select("item_id, discount_percentage")
   .eq("offer_id", id);
 
-if (items) {
-  const ids = items.map(i => i.menu_item_id);
+console.log("OFFER ITEMS:", items);
+console.log("OFFER ITEMS ERROR:", itemsError);
 
-  const { data: names } = await supabase
+if (itemsError) {
+  throw itemsError;
+}
+
+if (items && items.length > 0) {
+
+  const ids = items.map(
+    item => item.item_id
+  );
+
+  const {
+    data: names,
+    error: namesError
+  } = await supabase
     .from("category_items")
-    .select("id,name")
+    .select("id, name")
     .in("id", ids);
 
-  const merged = names.map(item => {
+  console.log("MENU ITEM NAMES:", names);
+  console.log("MENU ITEM NAMES ERROR:", namesError);
+
+  if (namesError) {
+    throw namesError;
+  }
+
+  const merged = (names || []).map(item => {
+
     const match = items.find(
-      i => i.menu_item_id === item.id
+      offerItem =>
+        offerItem.item_id === item.id
     );
 
     return {
       ...item,
-      discount_percentage: match?.discount_percentage ?? 0,
+      discount_percentage:
+        match?.discount_percentage ?? 0
     };
+
   });
 
   setOfferItems(merged);
+
+} else {
+
+  setOfferItems([]);
+
 }
 
 
