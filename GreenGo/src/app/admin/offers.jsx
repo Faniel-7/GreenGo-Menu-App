@@ -16,6 +16,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { formatLocalTime } from "../../utils/timeFormattter";
 import { useRouter } from "expo-router";
+import AdminToast from "../../components/admin/AdminToast";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import AuthGuard from "../../components/admin/AuthGuard";
@@ -32,6 +33,7 @@ export default function CreateOffer() {
     useState("happy_hour");
 
   const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState("");
 
   const [title, setTitle] = useState("");
 
@@ -566,18 +568,11 @@ throw groupError;
 
 
 
-Alert.alert(
-"Success",
-"Offer created successfully",
-[
-{
-text:"OK",
-onPress:()=>router.replace(
-`/admin/offers/${offer.id}`
-)
-}
-]
-);
+setToast("✓ Offer created successfully");
+
+setTimeout(() => {
+  router.replace(`/admin/offers/${offer.id}`);
+}, 1500);
 
 
 
@@ -604,6 +599,10 @@ setLoading(false);
 return (
 <AuthGuard>
 <AdminLayout>
+
+{toast ? (
+  <AdminToast message={toast} />
+) : null}
 
 <ScrollView
 style={styles.container}
