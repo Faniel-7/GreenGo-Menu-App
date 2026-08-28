@@ -489,7 +489,11 @@ if(offerError)
 throw offerError;
 
 
-
+console.log("========== OFFER CREATE DEBUG ==========");
+console.log("SELECTED GROUPS:", selectedGroups);
+console.log("SELECTED ITEMS:", selectedItems);
+console.log("ITEM DISCOUNTS:", itemDiscounts);
+console.log("========================================");
 
 
 if(selectedItems.length){
@@ -555,6 +559,8 @@ await supabase
 .from("offer_target_groups")
 
 .insert(groupsInsert);
+
+console.log("Target Groups Insert Error:", groupsError);
 
 
 
