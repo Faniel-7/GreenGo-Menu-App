@@ -1,3 +1,4 @@
+
 import {
   View,
   Text,
@@ -23,6 +24,7 @@ export default function OfferDetails() {
 
   const [offer, setOffer] = useState<any>(null);
   const [offerItems, setOfferItems] = useState<any[]>([]);
+  const [offerGroups, setOfferGroups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,13 +47,45 @@ export default function OfferDetails() {
 
       if (offerError) {
         console.log("OFFER ERROR:", offerError);
+        setOffer(null);
         setLoading(false);
         return;
       }
 
       setOffer(offerData);
 
-      // 2. GET OFFER ITEMS
+      // 2. GET TARGET GROUPS ASSIGNED TO THIS OFFER
+      const { data: groupLinks, error: groupLinksError } =
+        await supabase
+          .from("offer_target_groups")
+          .select("target_group_id")
+          .eq("offer_id", id);
+
+      if (groupLinksError) {
+        console.log("OFFER TARGET GROUPS ERROR:", groupLinksError);
+        setOfferGroups([]);
+      } else if (groupLinks && groupLinks.length > 0) {
+        const groupIds = groupLinks.map(
+          (group: any) => group.target_group_id
+        );
+
+        const { data: groups, error: groupsError } =
+          await supabase
+            .from("target_groups")
+            .select("id, name")
+            .in("id", groupIds);
+
+        if (groupsError) {
+          console.log("TARGET GROUP NAMES ERROR:", groupsError);
+          setOfferGroups([]);
+        } else {
+          setOfferGroups(groups || []);
+        }
+      } else {
+        setOfferGroups([]);
+      }
+
+      // 3. GET OFFER ITEMS
       const { data: offerItemData, error: offerItemError } =
         await supabase
           .from("offer_items")
@@ -59,17 +93,13 @@ export default function OfferDetails() {
           .eq("offer_id", id);
 
       if (offerItemError) {
-        console.log(
-          "OFFER ITEMS ERROR:",
-          offerItemError
-        );
-
+        console.log("OFFER ITEMS ERROR:", offerItemError);
         setOfferItems([]);
         setLoading(false);
         return;
       }
 
-      // 3. GET ACTUAL MENU ITEMS
+      // 4. GET ACTUAL MENU ITEMS
       if (offerItemData && offerItemData.length > 0) {
         const itemIds = offerItemData.map(
           (item: any) => item.item_id
@@ -82,16 +112,13 @@ export default function OfferDetails() {
             .in("id", itemIds);
 
         if (menuError) {
-          console.log(
-            "MENU ITEMS ERROR:",
-            menuError
-          );
+          console.log("MENU ITEMS ERROR:", menuError);
+          setOfferItems([]);
         } else {
           const combinedItems = offerItemData.map(
             (offerItem: any) => {
               const menuItem = menuData?.find(
-                (item: any) =>
-                  item.id === offerItem.item_id
+                (item: any) => item.id === offerItem.item_id
               );
 
               return {
@@ -144,13 +171,14 @@ export default function OfferDetails() {
   const formatDate = (date: string | null) => {
     if (!date) return "";
 
-    return new Date(
-      `${date}T00:00:00`
-    ).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+    return new Date(`${date}T00:00:00`).toLocaleDateString(
+      "en-US",
+      {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }
+    );
   };
 
   const calculateDiscountedPrice = (
@@ -189,7 +217,8 @@ export default function OfferDetails() {
         <Text style={styles.notFound}>
           Offer not found
         </Text>
-<TouchableOpacity
+
+        <TouchableOpacity
           onPress={() => router.back()}
           style={styles.backButton}
         >
@@ -205,12 +234,10 @@ export default function OfferDetails() {
 
   return (
     <View style={styles.container}>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-
         {/* BACK */}
 
         <TouchableOpacity
@@ -225,7 +252,6 @@ export default function OfferDetails() {
         {/* HERO */}
 
         <View style={styles.heroContainer}>
-
           {offer.image_url ? (
             <Image
               source={{
@@ -241,17 +267,14 @@ export default function OfferDetails() {
               </Text>
             </View>
           )}
-
         </View>
 
         {/* MAIN INFO */}
 
         <View style={styles.mainContent}>
-
           {/* LARGE TYPE */}
 
           <View style={styles.typeContainer}>
-
             <Text style={styles.typeIcon}>
               {offerType.icon}
             </Text>
@@ -259,7 +282,6 @@ export default function OfferDetails() {
             <Text style={styles.typeText}>
               {offerType.label}
             </Text>
-
           </View>
 
           {/* TITLE */}
@@ -288,7 +310,6 @@ export default function OfferDetails() {
 
           {offer.promotion_details ? (
             <View style={styles.detailsBox}>
-
               <Text style={styles.detailsLabel}>
                 ABOUT THIS OFFER
               </Text>
@@ -296,15 +317,44 @@ export default function OfferDetails() {
               <Text style={styles.detailsText}>
                 {offer.promotion_details}
               </Text>
-
             </View>
           ) : null}
+
+          {/* TARGET GROUPS */}
+
+          <View style={styles.targetGroupsSection}>
+            <Text style={styles.sectionTitle}>
+              THIS OFFER IS FOR
+            </Text>
+
+            {offerGroups.length > 0 ? (
+              <View style={styles.targetGroupsList}>
+                {offerGroups.map((group: any) => (
+                  <View
+                    key={group.id}
+                    style={styles.targetGroupTag}
+                  >
+                    <Text style={styles.targetGroupIcon}>
+                      👥
+                    </Text>
+
+                    <Text style={styles.targetGroupName}>
+                      {group.name}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <Text style={styles.targetGroupsEmpty}>
+                No target groups assigned.
+              </Text>
+            )}
+          </View>
 
           {/* ITEMS */}
 
           {offerItems.length > 0 ? (
             <View style={styles.itemsSection}>
-
               <Text style={styles.sectionTitle}>
                 SPECIAL MENU
               </Text>
@@ -314,12 +364,9 @@ export default function OfferDetails() {
               </Text>
 
               <View style={styles.itemsList}>
-
                 {offerItems.map(
                   (offerItem: any, index: number) => {
-
-                    const item =
-                      offerItem.menuItem;
+                    const item = offerItem.menuItem;
 
                     if (!item) return null;
 
@@ -337,54 +384,31 @@ export default function OfferDetails() {
                         key={`${item.id}-${index}`}
                         style={styles.itemRow}
                       >
-
-                        <View
-                          style={styles.itemInfo}
-                        >
-
-                          <Text
-                            style={styles.itemName}
-                          >
+                        <View style={styles.itemInfo}>
+                          <Text style={styles.itemName}>
                             {item.name}
                           </Text>
 
-                          {discount !==
-null &&
-                          discount !==
-                            undefined &&
+                          {discount !== null &&
+                          discount !== undefined &&
                           discount !== "" ? (
-                            <Text
-                              style={styles.discount}
-                            >
+                            <Text style={styles.discount}>
                               {Number(discount)}% OFF
                             </Text>
                           ) : null}
-
                         </View>
 
-                        <View
-                          style={styles.priceBox}
-                        >
-
-                          {finalPrice !==
-                          null ? (
+                        <View style={styles.priceBox}>
+                          {finalPrice !== null ? (
                             <>
-                              <Text
-                                style={
-                                  styles.oldPrice
-                                }
-                              >
+                              <Text style={styles.oldPrice}>
                                 {Number(
                                   item.price
                                 ).toLocaleString()}{" "}
                                 ETB
                               </Text>
 
-                              <Text
-                                style={
-                                  styles.newPrice
-                                }
-                              >
+                              <Text style={styles.newPrice}>
                                 {Math.round(
                                   finalPrice
                                 ).toLocaleString()}{" "}
@@ -392,27 +416,19 @@ null &&
                               </Text>
                             </>
                           ) : (
-                            <Text
-                              style={
-                                styles.normalPrice
-                              }
-                            >
+                            <Text style={styles.normalPrice}>
                               {Number(
                                 item.price
                               ).toLocaleString()}{" "}
                               ETB
                             </Text>
                           )}
-
                         </View>
-
                       </View>
                     );
                   }
                 )}
-
               </View>
-
             </View>
           ) : null}
 
@@ -424,10 +440,7 @@ null &&
             offer.start_time ||
             offer.end_time
           ) ? (
-            <View
-              style={styles.durationSection}
-            >
-
+            <View style={styles.durationSection}>
               <Text style={styles.sectionTitle}>
                 OFFER DURATION
               </Text>
@@ -437,7 +450,6 @@ null &&
                 offer.end_date
               ) ? (
                 <View style={styles.infoRow}>
-
                   <Text style={styles.infoIcon}>
                     📅
                   </Text>
@@ -458,7 +470,6 @@ null &&
                           offer.end_date
                         )}`}
                   </Text>
-
                 </View>
               ) : null}
 
@@ -467,36 +478,31 @@ null &&
                 offer.end_time
               ) ? (
                 <View style={styles.infoRow}>
-
                   <Text style={styles.infoIcon}>
                     🕐
                   </Text>
 
                   <Text style={styles.infoText}>
                     {offer.start_time &&
-offer.end_time
-  ? `${formatLocalTime(
-      offer.start_time
-    )} LT – ${formatLocalTime(
-      offer.end_time
-    )} LT`
-  : offer.start_time
-  ? `From ${formatLocalTime(
-      offer.start_time
-    )} LT`
-  : `Until ${formatLocalTime(
-      offer.end_time
-    )} LT`}
+                    offer.end_time
+                      ? `${formatLocalTime(
+                          offer.start_time
+                        )} LT – ${formatLocalTime(
+                          offer.end_time
+                        )} LT`
+                      : offer.start_time
+                      ? `From ${formatLocalTime(
+                          offer.start_time
+                        )} LT`
+                      : `Until ${formatLocalTime(
+                          offer.end_time
+                        )} LT`}
                   </Text>
-
                 </View>
               ) : null}
-
             </View>
           ) : null}
-
         </View>
-
       </ScrollView>
     </View>
   );
@@ -646,6 +652,49 @@ const styles = StyleSheet.create({
   },
 
   /*
+   * TARGET GROUPS
+   */
+
+  targetGroupsSection: {
+    marginTop: isDesktop ? 32 : 26,
+  },
+
+  targetGroupsList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginTop: 14,
+  },
+
+  targetGroupTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#151515",
+    borderWidth: 1,
+    borderColor: "#f4b400",
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 24,
+  },
+
+  targetGroupIcon: {
+    fontSize: 16,
+    marginRight: 8,
+  },
+
+  targetGroupName: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  targetGroupsEmpty: {
+    color: "#777",
+    fontSize: 13,
+    marginTop: 10,
+  },
+
+  /*
    * ITEMS
    */
 
@@ -746,7 +795,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 16,
   },
-infoIcon: {
+
+  infoIcon: {
     fontSize: 20,
     marginRight: 12,
   },
