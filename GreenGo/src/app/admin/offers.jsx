@@ -281,78 +281,69 @@ setItemDiscounts({
 async function addTargetGroup() {
   const groupName = newGroupName.trim();
 
+  const showMessage = (title, message) => {
+    if (Platform.OS === "web") {
+      window.alert(`${title}\n\n${message}`);
+    } else {
+      Alert.alert(title, message);
+    }
+  };
+
   if (!groupName) {
-    Alert.alert(
-      "Error",
-      "Enter target group name"
-    );
+    showMessage("Missing Name", "Please enter a target group name.");
+    return;
+  }
+
+  const alreadyExists = targetGroups.some(
+    (group) =>
+      group.name?.trim().toLowerCase() === groupName.toLowerCase()
+  );
+
+  if (alreadyExists) {
+    showMessage("Already Exists", "This target group already exists.");
     return;
   }
 
   try {
-    console.log(
-      "Creating target group:",
-      groupName
-    );
+    console.log("Creating target group:", groupName);
 
     const { data, error } = await supabase
       .from("target_groups")
-      .insert({
-        name: groupName,
-      })
+      .insert({ name: groupName })
       .select("*")
       .single();
 
     if (error) {
-      console.log(
-        "TARGET GROUP INSERT ERROR:",
-        error
-      );
-
-      Alert.alert(
-        "Target Group Error",
-        error.message
-      );
-
+      console.error("TARGET GROUP INSERT ERROR:", error);
+      showMessage("Target Group Error", error.message || "Could not create the target group.");
       return;
     }
 
-    if (!data) {
-      Alert.alert(
-        "Error",
-        "Target group was not created."
-      );
+    if (!data?.id) {
+      showMessage("Target Group Error", "The database did not return the created target group.");
       return;
     }
 
-    console.log(
-      "TARGET GROUP CREATED:",
-      data
+    console.log("TARGET GROUP CREATED:", data);
+
+    setTargetGroups((current) => {
+      if (current.some((group) => group.id === data.id)) return current;
+      return [...current, data];
+    });
+
+    setSelectedGroups((current) =>
+      current.includes(data.id) ? current : [...current, data.id]
     );
-
-    setTargetGroups((current) => [
-      ...current,
-      data,
-    ]);
-
-    setSelectedGroups((current) => [
-      ...current,
-      data.id,
-    ]);
 
     setNewGroupName("");
     setShowGroupModal(false);
-
+    setToast(`✓ Target group "${data.name}" added successfully`);
   } catch (error) {
-    console.log(
-      "TARGET GROUP ERROR:",
-      error
-    );
-
-    Alert.alert(
-      "Error",
-      "Something went wrong while creating the target group."
-    );
+    console.error("TARGET GROUP ERROR:", error);
+    const message = error instanceof Error
+      ? error.message
+      : "An unexpected error occurred while creating the target group.";
+    showMessage("Target Group Error", message);
   }
 }
 
