@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
-import { formatLocalTime } from "../../../utils/timeFormattter";
+import OfferScheduleFields from "../../../components/admin/OfferScheduleFields";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AdminToast from "../../../components/admin/AdminToast";
 import AdminLayout from "../../../components/admin/AdminLayout";
@@ -379,14 +379,8 @@ async function updateOffer() {
             : null,
         start_date: startDate || null,
         end_date: endDate || null,
-        start_time:
-          offerType === "happy_hour"
-            ? startTime
-            : null,
-        end_time:
-          offerType === "happy_hour"
-            ? endTime
-            : null,
+        start_time: startTime.trim() || null,
+        end_time: endTime.trim() || null,
         active,
       })
       .eq("id", id);
@@ -603,19 +597,8 @@ endDate
 :
 null,
 
-start_time:
-offerType==="happy_hour"
-?
-startTime
-:
-null,
-
-end_time:
-offerType==="happy_hour"
-?
-endTime
-:
-null,
+start_time: startTime.trim() || null,
+end_time: endTime.trim() || null,
 
 active:active
 
@@ -1032,39 +1015,14 @@ onPress={()=>toggleCategory(category)}
 </View>
 
 {offerType==="happy_hour"&&(
-
-<>
-
-<Text style={styles.section}>
-Happy Hour
-</Text>
-
-<TextInput
-style={styles.input}
-placeholder="Discount %"
-placeholderTextColor="#777"
-keyboardType="numeric"
-value={discountPercentage}
-onChangeText={setDiscountPercentage}
-/>
-
-<TextInput
-style={styles.input}
-placeholder="Start Time (4:00 PM)"
-placeholderTextColor="#777"
-value={startTime}
-onChangeText={setStartTime}
-/>
-<TextInput
-style={styles.input}
-placeholder="End Time (6:00 PM)"
-placeholderTextColor="#777"
-value={endTime}
-onChangeText={setEndTime}
-/>
-
-</>
-
+  <TextInput
+    style={styles.input}
+    placeholder="Discount % (optional)"
+    placeholderTextColor="#777"
+    keyboardType="numeric"
+    value={discountPercentage}
+    onChangeText={setDiscountPercentage}
+  />
 )}
 
 {offerType==="discount"&&(
@@ -1093,24 +1051,15 @@ multiline
 
 )}
 
-<Text style={styles.section}>
-Offer Duration
-</Text>
-
-<TextInput
-style={styles.input}
-placeholder="Start Date(YYYY-MM-DD)"
-placeholderTextColor="#777"
-value={startDate}
-onChangeText={setStartDate}
-/>
-
-<TextInput
-style={styles.input}
-placeholder="End Date(YYYY-MM-DD)"
-placeholderTextColor="#777"
-value={endDate}
-onChangeText={setEndDate}
+<OfferScheduleFields
+  startDate={startDate}
+  endDate={endDate}
+  startTime={startTime}
+  endTime={endTime}
+  setStartDate={setStartDate}
+  setEndDate={setEndDate}
+  setStartTime={setStartTime}
+  setEndTime={setEndTime}
 />
 
 <View style={styles.switchRow}>
