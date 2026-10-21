@@ -14,7 +14,8 @@ import { useEffect, useState } from "react";
 import { useLocalSearchParams, router } from "expo-router";
 
 import { supabase } from "../../../lib/supabase";
-import { formatLocalTime } from "../../../utils/timeFormattter";
+import { formatOfferTime } from "../../../utils/timeFormattter";
+import { formatOfferDateBoth } from "../../../utils/dateFormatter";
 
 const { width } = Dimensions.get("window");
 const isDesktop = width >= 768;
@@ -168,18 +169,7 @@ export default function OfferDetails() {
     }
   };
 
-  const formatDate = (date: string | null) => {
-    if (!date) return "";
-
-    return new Date(`${date}T00:00:00`).toLocaleDateString(
-      "en-US",
-      {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      }
-    );
-  };
+  const formatDate = (date: string | null) => formatOfferDateBoth(date);
 
   const calculateDiscountedPrice = (
     price: number,
@@ -219,7 +209,7 @@ export default function OfferDetails() {
         </Text>
 
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace("/menu/offers" as any)}
           style={styles.backButton}
         >
           <Text style={styles.backText}>
@@ -242,7 +232,7 @@ export default function OfferDetails() {
 
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace("/menu/offers" as any)}
         >
           <Text style={styles.backText}>
             ← MENU
@@ -485,18 +475,10 @@ export default function OfferDetails() {
                   <Text style={styles.infoText}>
                     {offer.start_time &&
                     offer.end_time
-                      ? `${formatLocalTime(
-                          offer.start_time
-                        )} LT – ${formatLocalTime(
-                          offer.end_time
-                        )} LT`
+                      ? `${formatOfferTime(offer.start_time)} – ${formatOfferTime(offer.end_time)}`
                       : offer.start_time
-                      ? `From ${formatLocalTime(
-                          offer.start_time
-                        )} LT`
-                      : `Until ${formatLocalTime(
-                          offer.end_time
-                        )} LT`}
+                      ? `From ${formatOfferTime(offer.start_time)}`
+                      : `Until ${formatOfferTime(offer.end_time)}`}
                   </Text>
                 </View>
               ) : null}
