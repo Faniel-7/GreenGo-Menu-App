@@ -30,7 +30,7 @@ return;
 
 }
 
-router.replace("../../admin/login");
+router.replace("/admin/login");
 
 }
 
