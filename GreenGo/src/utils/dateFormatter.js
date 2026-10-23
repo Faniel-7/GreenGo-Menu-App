@@ -1,7 +1,6 @@
 function parseLocalDate(date) {
   if (!date) return null;
 
-  // Avoid timezone shifts when parsing YYYY-MM-DD.
   const parts = String(date).split("-").map(Number);
 
   if (parts.length !== 3 || parts.some(Number.isNaN)) {
@@ -51,8 +50,7 @@ export function formatEthiopianDate(date) {
       timeZone: "Africa/Addis_Ababa",
     }).format(parsed);
   } catch (error) {
-    // Keep the page usable if the runtime does not support
-    // the Ethiopian calendar formatter.
+  
     return "";
   }
 }
