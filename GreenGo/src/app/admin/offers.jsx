@@ -124,7 +124,7 @@ async function fetchTargetGroups(){
 
   if(error){
 
-    console.log(error);
+    console.error(error);
 
     return;
 
@@ -149,7 +149,7 @@ async function fetchMenuItems(){
 
   if(error){
 
-    console.log(error);
+    console.error(error);
 
     return;
 
@@ -176,7 +176,7 @@ async function fetchMenuCategories() {
 
   if (error) {
 
-    console.log(
+    console.error(
       "Menu categories error:",
       error
     );
@@ -206,10 +206,8 @@ async function pickImage(){
 
   if(!result.canceled){
 
-    setImages([
-      ...images,
-      result.assets[0].uri
-    ]);
+    // This form uses a single offer image. A new selection replaces it.
+    setImages([result.assets[0].uri]);
 
   }
 
@@ -305,7 +303,7 @@ async function addTargetGroup() {
   }
 
   try {
-    console.log("Creating target group:", groupName);
+    
 
     const { data, error } = await supabase
       .from("target_groups")
@@ -324,7 +322,7 @@ async function addTargetGroup() {
       return;
     }
 
-    console.log("TARGET GROUP CREATED:", data);
+    
 
     setTargetGroups((current) => {
       if (current.some((group) => group.id === data.id)) return current;
@@ -387,24 +385,44 @@ async function uploadImage(uri){
 
 }
 async function createOffer(){
+  if (loading) return;
 
-if(loading)
-return;
-setLoading(true);
+  if (!title.trim()) {
+    Alert.alert("Missing title", "Please enter an offer title.");
+    return;
+  }
 
-if(!title.trim()){
+  const discount = discountPercentage.trim() ? Number(discountPercentage) : null;
+  if (discount !== null && (!Number.isFinite(discount) || discount < 0 || discount > 100)) {
+    Alert.alert("Invalid discount", "Enter a discount between 0 and 100.");
+    return;
+  }
 
-Alert.alert(
-"Error",
-"Offer title required"
-);
+  if (startDate && endDate && startDate > endDate) {
+    Alert.alert("Invalid schedule", "The end date must be on or after the start date.");
+    return;
+  }
 
-return;
+  const invalidItemDiscount = selectedItems.some((itemId) => {
+    const value = itemDiscounts[itemId];
+    if (value === undefined || String(value).trim() === "") return false;
+    const number = Number(value);
+    return !Number.isFinite(number) || number < 0 || number > 100;
+  });
+  if (invalidItemDiscount) {
+    Alert.alert("Invalid item discount", "Each menu item discount must be between 0 and 100.");
+    return;
+  }
 
-}
+  const validTime = (value) => !value || /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+  if (!validTime(startTime) || !validTime(endTime)) {
+    Alert.alert("Invalid time", "Enter times in 24-hour HH:MM format.");
+    return;
+  }
 
+  setLoading(true);
 
-try{
+  try{
 
 
 let imageUrl = null;
@@ -439,6 +457,9 @@ description_en:descriptionEn,
 
 description_ti:descriptionLocal,
 
+promotion_details: promotionDetails.trim() || null,
+
+discount_percentage: discount,
 
 start_date:startDate.trim()
 ?
@@ -467,13 +488,6 @@ active:active
 
 if(offerError)
 throw offerError;
-
-
-console.log("========== OFFER CREATE DEBUG ==========");
-console.log("SELECTED GROUPS:", selectedGroups);
-console.log("SELECTED ITEMS:", selectedItems);
-console.log("ITEM DISCOUNTS:", itemDiscounts);
-console.log("========================================");
 
 
 if(selectedItems.length){
@@ -540,8 +554,6 @@ await supabase
 
 .insert(groupsInsert);
 
-console.log("Target Groups Insert Error:", groupsError);
-
 
 
 if(groupError)
@@ -566,11 +578,11 @@ setTimeout(() => {
 
 catch(error){
 
-console.log(error);
+console.error("Failed to create offer:", error);
 
 Alert.alert(
-"Error",
-error.message
+"Could not create offer",
+error?.message || "An unexpected error occurred. Please try again."
 );
 
 }
@@ -766,7 +778,7 @@ selectedGroups.includes(group.id)
 <TouchableOpacity
   style={styles.addGroupButton}
   onPress={() => {
-    console.log("Add Target Group pressed");
+    
     setShowGroupModal(true);
   }}
   activeOpacity={0.7}
