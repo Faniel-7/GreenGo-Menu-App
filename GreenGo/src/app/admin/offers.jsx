@@ -14,7 +14,7 @@ import {
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
-import { formatLocalTime } from "../../utils/timeFormattter";
+import OfferScheduleFields from "../../components/admin/OfferScheduleFields";
 import { useRouter } from "expo-router";
 import AdminToast from "../../components/admin/AdminToast";
 
@@ -452,19 +452,8 @@ endDate
 :
 null,
 
-start_time:
-offerType==="happy_hour"
-?
-startTime
-:
-null,
-
-end_time:
-offerType==="happy_hour"
-?
-endTime
-:
-null,
+start_time: startTime.trim() || null,
+end_time: endTime.trim() || null,
 
 active:active
 
@@ -897,63 +886,6 @@ setItemDiscounts({
 
 </View>
 
-{offerType==="happy_hour"&&(
-
-<>
-
-<Text style={styles.section}>
-Happy Hour
-</Text>
-
-
-
-<Text style={styles.dateLabel}>
-  Start Time
-</Text>
-
-<input
-  type="time"
-  value={startTime}
-  onChange={(event) =>
-    setStartTime(event.target.value)
-  }
-  style={styles.webDateInput}
-/>
-
-{startTime ? (
-  <Text style={styles.selectedTimeText}>
-    {formatLocalTime(startTime)}
-  </Text>
-) : null}
-
-<Text style={styles.dateLabel}>
-  End Time
-</Text>
-
-<input
-  type="time"
-  value={endTime}
-  onChange={(event) =>
-    setEndTime(event.target.value)
-  }
-  style={styles.webDateInput}
-/>
-
-{endTime ? (
-  <Text style={styles.selectedTimeText}>
-    {formatLocalTime(endTime)}
-  </Text>
-) : null}
-
-<Text style={styles.localTimeHint}>
-  Local Time (LT)
-</Text>
-
-</>
-
-)}
-
-
 {offerType==="promotion"&&(
 
 <TextInput
@@ -967,50 +899,16 @@ multiline
 
 )}
 
-<Text style={styles.section}>
-Offer Duration
-</Text>
-
-{Platform.OS === "web" ? (
-  <View style={styles.dateInputWrapper}>
-    <Text style={styles.dateLabel}>
-      Start Date
-    </Text>
-
-    <input
-      type="date"
-      value={startDate}
-      onChange={(event) =>
-        setStartDate(event.target.value)
-      }
-      style={styles.webDateInput}
-    />
-  </View>
-) : (
-  <TextInput
-    style={styles.input}
-    placeholder="Start Date (YYYY-MM-DD)"
-    placeholderTextColor="#777"
-    value={startDate}
-    onChangeText={setStartDate}
-  />
-)}
-
-<View style={styles.dateInputWrapper}>
-  <Text style={styles.dateLabel}>
-    End Date
-  </Text>
-
-  <input
-    type="date"
-    value={endDate}
-    min={startDate || undefined}
-    onChange={(event) =>
-      setEndDate(event.target.value)
-    }
-    style={styles.webDateInput}
-  />
-</View>
+<OfferScheduleFields
+  startDate={startDate}
+  endDate={endDate}
+  startTime={startTime}
+  endTime={endTime}
+  setStartDate={setStartDate}
+  setEndDate={setEndDate}
+  setStartTime={setStartTime}
+  setEndTime={setEndTime}
+/>
 
 <View style={styles.switchRow}>
 
