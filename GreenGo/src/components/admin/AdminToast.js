@@ -35,9 +35,10 @@ error:{
   backgroundColor:"#d32f2f",
 },
 
+
 text:{
   color:"#fff",
-  fontWeight:"900",
+  fontWeight:"910",
   fontSize:15,
 }
 
