@@ -3,104 +3,66 @@ import { View, ActivityIndicator } from "react-native";
 import { router } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
-
 export default function AuthGuard({ children }) {
-
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
+    let mounted = true;
+
+    async function checkAdmin() {
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        if (!session) {
+          router.replace("/admin/login");
+          return;
+        }
+
+        const { data: admin, error: adminError } = await supabase
+          .from("admins")
+          .select("user_id")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+
+        if (adminError) throw adminError;
+
+        if (!admin) {
+          await supabase.auth.signOut();
+          router.replace("/admin/login");
+          return;
+        }
+
+        if (mounted) setLoading(false);
+      } catch (error) {
+        console.error("Admin authentication check failed:", error);
+        router.replace("/admin/login");
+      }
+    }
+
     checkAdmin();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-
-
-  async function checkAdmin() {
-
-    console.log("ADMIN GUARD RUNNING");
-
-
-    // Get logged in user
-    const {
-      data: { session },
-      error
-    } = await supabase.auth.getSession();
-
-
-
-    if (error || !session) {
-
-      console.log("NO SESSION");
-      router.replace("/admin/login");
-      return;
-
-    }
-
-
-
-    const user = session.user;
-
-
-    console.log("USER:", user.email);
-
-
-
-    // Check admins table
-
-    const { data: admin, error: adminError } =
-      await supabase
-        .from("admins")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-
-
-    if (adminError || !admin) {
-
-      console.log("NOT AN ADMIN");
-
-      await supabase.auth.signOut();
-
-      router.replace("/admin/login");
-
-      return;
-
-    }
-
-
-
-    console.log("ADMIN VERIFIED");
-
-
-    setLoading(false);
-
-  }
-
-
-
   if (loading) {
-
     return (
-
       <View
         style={{
-          flex:1,
-          justifyContent:"center",
-          alignItems:"center",
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-
-        <ActivityIndicator size="large"/>
-
+        <ActivityIndicator size="large" />
       </View>
-
     );
-
   }
 
-
-
   return children;
-
 }
