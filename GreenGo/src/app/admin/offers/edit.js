@@ -117,7 +117,7 @@ async function fetchTargetGroups(){
 
   if(error){
 
-    console.log(error);
+    console.error(error);
 
     return;
 
@@ -142,7 +142,7 @@ async function fetchMenuItems(){
 
   if(error){
 
-    console.log(error);
+    console.error(error);
 
     return;
 
@@ -239,10 +239,9 @@ async function pickImage(){
 
   if(!result.canceled){
 
-    setImages([
-      ...images,
-      result.assets[0].uri
-    ]);
+    // The offer form supports one image; replace the current image instead
+    // of appending a new one behind the old URL.
+    setImages([result.assets[0].uri]);
 
   }
 
@@ -345,13 +344,42 @@ async function uploadImage(uri){
 }
 
 async function updateOffer() {
-
-    setLoading(true);
+  if (loading) return;
 
   if (!title.trim()) {
-    Alert.alert("Error", "Offer title required");
+    Alert.alert("Missing title", "Please enter an offer title.");
     return;
   }
+
+  const discount = discountPercentage.trim() ? Number(discountPercentage) : null;
+  if (discount !== null && (!Number.isFinite(discount) || discount < 0 || discount > 100)) {
+    Alert.alert("Invalid discount", "Enter a discount between 0 and 100.");
+    return;
+  }
+
+  if (startDate && endDate && startDate > endDate) {
+    Alert.alert("Invalid schedule", "The end date must be on or after the start date.");
+    return;
+  }
+
+  const invalidItemDiscount = selectedItems.some((itemId) => {
+    const value = itemDiscounts[itemId];
+    if (value === undefined || String(value).trim() === "") return false;
+    const number = Number(value);
+    return !Number.isFinite(number) || number < 0 || number > 100;
+  });
+  if (invalidItemDiscount) {
+    Alert.alert("Invalid item discount", "Each menu item discount must be between 0 and 100.");
+    return;
+  }
+
+  const validTime = (value) => !value || /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+  if (!validTime(startTime) || !validTime(endTime)) {
+    Alert.alert("Invalid time", "Enter times in 24-hour HH:MM format.");
+    return;
+  }
+
+  setLoading(true);
 
   try {
 
@@ -373,10 +401,8 @@ async function updateOffer() {
         image_url: imageUrl,
         description_en: descriptionEn,
         description_ti: descriptionLocal,
-        discount_percentage:
-          discountPercentage
-            ? Number(discountPercentage)
-            : null,
+        promotion_details: promotionDetails.trim() || null,
+        discount_percentage: discount,
         start_date: startDate || null,
         end_date: endDate || null,
         start_time: startTime.trim() || null,
@@ -390,10 +416,11 @@ async function updateOffer() {
 
 // Remove old menu items
 
-await supabase
-.from("offer_items")
-.delete()
-.eq("offer_id", id);
+const { error: deleteItemsError } = await supabase
+  .from("offer_items")
+  .delete()
+  .eq("offer_id", id);
+if (deleteItemsError) throw deleteItemsError;
 
 
 // Add current menu items
@@ -424,10 +451,11 @@ if (selectedItems.length) {
 
 // Remove old target groups
 
-await supabase
-.from("offer_target_groups")
-.delete()
-.eq("offer_id", id);
+const { error: deleteGroupsError } = await supabase
+  .from("offer_target_groups")
+  .delete()
+  .eq("offer_id", id);
+if (deleteGroupsError) throw deleteGroupsError;
 
 
 
@@ -462,11 +490,11 @@ setTimeout(()=>{
 
   } catch (error) {
 
-  console.log(error);
+  console.error("Failed to update offer:", error);
 
   Alert.alert(
-    "Error",
-    error.message
+    "Could not save offer",
+    error?.message || "An unexpected error occurred. Please try again."
   );
 
 }
@@ -480,243 +508,38 @@ finally {
 }
 
 
-async function createOffer(){
-
-if(!title.trim()){
-
-Alert.alert(
-"Error",
-"Offer title required"
-);
-
-async function addTargetGroup(){
-
-if(!newGroupName.trim()){
-
-Alert.alert(
-"Error",
-"Enter target group name"
-);
-
-return;
-
-}
-
-
-const {data,error}=
-
-await supabase
-.from("target_groups")
-.insert({
-name:newGroupName
-})
-.select()
-.single();
-
-
-if(error){
-
-Alert.alert(
-"Error",
-error.message
-);
-
-return;
-
-}
-
-
-setTargetGroups([
-...targetGroups,
-data
-]);
-
-
-setNewGroupName("");
-
-setShowGroupModal(false);
-
-}
-
-return;
-
-}
-
-
-try{
-
-
-let imageUrl = null;
-
-
-
-if(images.length > 0){
-
-imageUrl =
-await uploadImage(images[0]);
-
-}
-
-
-
-
-const {data:offer,error:offerError}=
-
-await supabase
-
-.from("offers")
-
-.insert({
-
-title:title,
-
-type:offerType,
-
-image_url:imageUrl,
-
-description_en:descriptionEn,
-
-description_ti:descriptionLocal,
-
-discount_percentage:
-discountPercentage
-?
-Number(discountPercentage)
-:
-null,
-
-start_date:startDate.trim()
-?
-startDate
-:
-null,
-
-end_date:endDate.trim()
-?
-endDate
-:
-null,
-
-start_time: startTime.trim() || null,
-end_time: endTime.trim() || null,
-
-active:active
-
-})
-
-.select()
-
-.single();
-
-
-
-if(offerError)
-throw offerError;
-
-
-
-
-
-if(selectedItems.length){
-
-
-const itemsInsert =
-
-selectedItems.map(item=>({
-
-offer_id:offer.id,
-
-item_id:item
-
-}));
-
-
-
-const {error:itemError}=
-
-await supabase
-
-.from("offer_items")
-
-.insert(itemsInsert);
-
-
-
-if(itemError)
-throw itemError;
-
-
-}
-
-
-
-
-
-
-if(selectedGroups.length){
-
-
-const groupsInsert =
-
-selectedGroups.map(group=>({
-
-offer_id:offer.id,
-
-target_group_id:group
-
-}));
-
-
-
-const {error:groupError}=
-
-await supabase
-
-.from("offer_target_groups")
-
-.insert(groupsInsert);
-
-
-
-if(groupError)
-throw groupError;
-
-
-}
-
-
-
-
-
-Alert.alert(
-"Success",
-"Offer created"
-);
-
-
-
-router.push(`/admin/offers/${offer.id}`);
-
-
-
-}
-
-catch(error){
-
-
-console.log(error);
-
-
-Alert.alert(
-"Error",
-error.message
-);
-
-
-}
-
-
-
+async function addTargetGroup() {
+  const groupName = newGroupName.trim();
+
+  if (!groupName) {
+    Alert.alert("Missing name", "Please enter a target group name.");
+    return;
+  }
+
+  if (targetGroups.some((group) => group.name?.trim().toLowerCase() === groupName.toLowerCase())) {
+    Alert.alert("Already exists", "A target group with this name already exists.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("target_groups")
+      .insert({ name: groupName })
+      .select("*")
+      .single();
+
+    if (error) throw error;
+    if (!data?.id) throw new Error("The database did not return the new target group.");
+
+    setTargetGroups((current) => [...current, data]);
+    setSelectedGroups((current) => current.includes(data.id) ? current : [...current, data.id]);
+    setNewGroupName("");
+    setShowGroupModal(false);
+    setToast(`✓ Target group "${data.name}" added successfully`);
+  } catch (error) {
+    console.error("Failed to create target group:", error);
+    Alert.alert("Target group error", error?.message || "Could not create the target group.");
+  }
 }
 
 return (
