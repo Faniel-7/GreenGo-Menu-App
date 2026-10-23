@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { router } from "expo-router";
 
 import { supabase } from "../../lib/supabase";
+import { formatOfferDateBoth } from "../../utils/dateFormatter";
+import { formatOfferTime } from "../../utils/timeFormattter";
 
 export default function OffersPage() {
   const { width } = useWindowDimensions();
@@ -415,6 +417,18 @@ export default function OffersPage() {
 
                     )}
 
+                    {/* OFFER SCHEDULE — both Gregorian and Ethiopian dates */}
+                    {(offer.start_date || offer.end_date || offer.start_time || offer.end_time) ? (
+                      <View style={styles.scheduleBox}>
+                        {(offer.start_date || offer.end_date) ? (
+                          <Text style={styles.scheduleText}>📅 {offer.start_date && offer.end_date ? `${formatOfferDateBoth(offer.start_date)} – ${formatOfferDateBoth(offer.end_date)}` : offer.start_date ? `From ${formatOfferDateBoth(offer.start_date)}` : `Until ${formatOfferDateBoth(offer.end_date)}`}</Text>
+                        ) : null}
+                        {(offer.start_time || offer.end_time) ? (
+                          <Text style={styles.scheduleText}>🕒 {offer.start_time && offer.end_time ? `${formatOfferTime(offer.start_time)} – ${formatOfferTime(offer.end_time)}` : offer.start_time ? `From ${formatOfferTime(offer.start_time)}` : `Until ${formatOfferTime(offer.end_time)}`}</Text>
+                        ) : null}
+                      </View>
+                    ) : null}
+
                     {/* VIEW OFFER */}
 
                     <View
@@ -677,5 +691,8 @@ eyebrow: {
     marginTop: 8,
     textAlign: "center",
   },
+
+  scheduleBox: { marginTop: 14, padding: 11, backgroundColor: "#111", borderLeftWidth: 3, borderLeftColor: "#f4b400", borderRadius: 7, gap: 6 },
+  scheduleText: { color: "#ddd", fontSize: 12, lineHeight: 18 },
 
 });
