@@ -101,7 +101,7 @@ export default function Categories() {
     );
 
   } catch (error) {
-    console.log(
+    console.error(
       "Category active error:",
       error
     );
@@ -142,7 +142,7 @@ export default function Categories() {
     }
     catch(error){
 
-      console.log(error.message);
+      console.error(error.message);
 
     }
     finally{
