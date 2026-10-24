@@ -51,7 +51,7 @@ await supabase
 
 if(error){
 
-console.log(error);
+console.error(error);
 
 return;
 
@@ -100,8 +100,8 @@ role:role,
 })
 .select();
 
-console.log("Data:", data)
-console.log("Error:", error)
+
+
 
 
 if(error){
@@ -165,8 +165,8 @@ return;
     .eq("id", id)
     .select();
 
-  console.log("Deleted data:", data);
-  console.log("Delete error:", error);
+  
+  
 
   if (error) {
     Alert.alert("Error", error.message);
@@ -220,7 +220,7 @@ async function fetchMyRole() {
     .single();
 
   if (error) {
-    console.log(error);
+    console.error(error);
     return;
   }
 
@@ -466,7 +466,7 @@ Make Super Admin
 <TouchableOpacity
 style={styles.removeButton}
 onPress={() =>{
-console.log("Removing admin with ID:", admin.id);
+
  deleteAdmin(admin.id)}}
 >
 
