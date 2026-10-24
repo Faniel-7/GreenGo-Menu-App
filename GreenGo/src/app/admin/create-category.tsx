@@ -401,7 +401,7 @@ if (itemError) {
         ]
       );
     } catch (error) {
-      console.log(
+      console.error(
         "Create category error:",
         error
       );
