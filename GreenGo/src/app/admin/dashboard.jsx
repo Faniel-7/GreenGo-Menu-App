@@ -138,6 +138,14 @@ export default function Dashboard() {
             Manage GreenGo Restaurant
           </Text>
 
+          <TouchableOpacity
+            style={styles.goToMenuButton}
+            activeOpacity={0.85}
+            onPress={() => router.push("/menu/pizza")}
+          >
+            <Text style={styles.goToMenuButtonText}>Go to Menu  →</Text>
+          </TouchableOpacity>
+
           <View style={styles.grid}>
             {cards.map((card, index) => (
               <TouchableOpacity
@@ -189,8 +197,23 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: "white",
-    marginBottom: 30,
+    marginBottom: 18,
     fontSize: 16,
+  },
+
+  goToMenuButton: {
+    alignSelf: "flex-start",
+    backgroundColor: "#f4b400",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 30,
+  },
+
+  goToMenuButtonText: {
+    color: "#030303",
+    fontSize: 15,
+    fontWeight: "900",
   },
 
   grid: {
