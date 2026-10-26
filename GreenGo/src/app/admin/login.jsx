@@ -21,32 +21,40 @@ export default function Login() {
 
 
   async function handleLogin() {
+    if (loading) return;
 
     setError("");
-    setLoading(true);
 
-    const { data, error } =
-      await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      });
-
-
-    if (error) {
-      setError(error.message);
-      setLoading(false);
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !password) {
+      setError("Enter both your email and password.");
       return;
     }
 
+    setLoading(true);
+    try {
+      const { data, error: loginError } =
+        await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password,
+        });
 
-    if (data.session) {
+      if (loginError) throw loginError;
+
+      if (!data.session) {
+        throw new Error("Login succeeded but no session was returned. Please try again.");
+      }
+
       router.replace("/admin/dashboard");
+    } catch (loginError) {
+      setError(
+        loginError?.message ||
+          "Unable to sign in. Check your connection and try again."
+      );
+    } finally {
+      setLoading(false);
     }
-
-
-    setLoading(false);
   }
-
 
   return (
 
@@ -88,6 +96,8 @@ export default function Login() {
       <TouchableOpacity
         style={styles.loginButton}
         onPress={handleLogin}
+        disabled={loading}
+        activeOpacity={loading ? 1 : 0.8}
       >
 
         {
