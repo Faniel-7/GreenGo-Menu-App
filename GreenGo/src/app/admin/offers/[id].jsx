@@ -83,8 +83,8 @@ const {
   .select("target_group_id")
   .eq("offer_id", id);
 
-console.log("OFFER TARGET GROUPS:", groups);
-console.log("TARGET GROUP ERROR:", groupsError);
+
+
 
 if (groupsError) {
   throw groupsError;
@@ -101,9 +101,9 @@ if (groups && groups.length > 0) {
   .select("id, name")
   .in("id", ids);
 
-console.log("TARGET GROUP IDS:", ids);
-console.log("TARGET GROUP RECORDS:", names);
-console.log("TARGET GROUP LOOKUP ERROR:", namesError);
+
+
+
 
 setOfferGroups(names || []);
 
@@ -130,8 +130,8 @@ const {
   .select("item_id, discount_percentage")
   .eq("offer_id", id);
 
-console.log("OFFER ITEMS:", items);
-console.log("OFFER ITEMS ERROR:", itemsError);
+
+
 
 if (itemsError) {
   throw itemsError;
@@ -151,8 +151,8 @@ if (items && items.length > 0) {
     .select("id, name")
     .in("id", ids);
 
-  console.log("MENU ITEM NAMES:", names);
-  console.log("MENU ITEM NAMES ERROR:", namesError);
+  
+  
 
   if (namesError) {
     throw namesError;
@@ -186,7 +186,7 @@ if (items && items.length > 0) {
 
     catch(error){
 
-      console.log(error);
+      console.error(error);
 
       Alert.alert(
         "Error",
@@ -292,7 +292,7 @@ offer.type === "discount"
 {
 offer.image_url ?
 
-<Image
+<Image resizeMode="contain"
 source={{
   uri: offer.image_url
 }}
@@ -813,7 +813,6 @@ imageCard:{
 image:{
   width:"100%",
   height:"100%",
-  resizeMode:"contain",
   backgroundColor:"#111",
 },
 
