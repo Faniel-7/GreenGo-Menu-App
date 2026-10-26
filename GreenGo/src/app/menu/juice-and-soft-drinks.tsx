@@ -34,7 +34,7 @@ export default function CategoryScreen() {
     .order("id");
 
   if (error) {
-    console.log(error);
+    console.error(error);
     return;
   }
 
@@ -56,38 +56,40 @@ const softDrinkItems = juiceItems.filter(
 );
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        {
-  isLargeScreen && (
-    <View style={styles.DesktopDevider} />
-  )
-}
+    <View style={styles.container}>
+      {isLargeScreen ? (
+        <View style={styles.desktopSidebar}>
+          <Sidebar
+            visible={true}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </View>
+      ) : (
+        <>
+          {isMobile && (
+            <TouchableOpacity
+              style={styles.settings}
+              onPress={() => setSidebarVisible(!sidebarVisible)}
+            >
+              <Ionicons name="menu" size={32} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Sidebar
+            visible={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </>
+      )}
 
-        {isMobile && (
-  <TouchableOpacity
-    style={styles.settings}
-    onPress={() => setSidebarVisible(!sidebarVisible)}
-  >
-    <Ionicons
-      name="menu"
-      size={32}
-      color="#fff"
-    />
-  </TouchableOpacity>
-)}
-            
-            <Sidebar
-  visible={isLargeScreen ? true : sidebarVisible}
-  onClose={() => setSidebarVisible(false)}
-/>
-            
+      <ScrollView
+        style={styles.menuScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {isLargeScreen && <View style={styles.DesktopDevider} />}
 
         <View style={styles.leftSide}>
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/logo.png")}
             style={styles.logo}
           />
@@ -278,43 +280,43 @@ const softDrinkItems = juiceItems.filter(
               </View>
             )}
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/juice/juice3.png")}
             style={styles.juiceTop}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/juice/juice6.png")}
             style={styles.juiceMiddle}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/juice/juice8.png")}
             style={styles.juiceBottom}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/juice/juice5.png")}
             style={styles.juiceBottom2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/juice/juice1.png")}
             style={styles.juiceBottom3}
           />
 
           
-<Image
+<Image resizeMode="contain"
             source={require("../../../assets/images/leaf-1.png")}
             style={styles.leaf1}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-2.png")}
             style={styles.leaf2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-3.png")}
             style={styles.leaf3}
           />
@@ -333,7 +335,8 @@ const softDrinkItems = juiceItems.filter(
 
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -341,6 +344,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#030303",
+    position: "relative",
+  },
+
+  menuScroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  desktopSidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 270,
+    height: "100%",
+    zIndex: 1000,
   },
 
   content: {
@@ -363,7 +381,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -474,7 +491,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 120 : -75,
   width: isDesktop ? 420 : 320,
   height: isDesktop ? 420 : 320,
-  resizeMode: "contain",
 },
 
   juiceMiddle: {
@@ -483,7 +499,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 120 : -65,
   width: isDesktop ? 320 : 280,
   height: isDesktop ? 320 : 280,
-  resizeMode: "contain",
 },
 
   juiceBottom: {
@@ -492,7 +507,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 170 : -30,
   width: isDesktop ? 240 : 210,
   height: isDesktop ? 240 : 210,
-  resizeMode: "contain",
 },
 
   juiceBottom2: {
@@ -501,7 +515,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 120 : -80,
   width: isDesktop ? 340 : 300,
   height: isDesktop ? 340 : 300,
-  resizeMode: "contain",
 },
 
   juiceBottom3: {
@@ -510,7 +523,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 180 : -25,
   width: isDesktop ? 230 : 200,
   height: isDesktop ? 230 : 200,
-  resizeMode: "contain",
 },
 
   badge: {
@@ -551,7 +563,6 @@ const styles = StyleSheet.create({
     left: 52,
     width: 70,
     height: 70,
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -560,7 +571,6 @@ const styles = StyleSheet.create({
     left: 45,
     width: 80,
     height: 80,
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -569,7 +579,6 @@ const styles = StyleSheet.create({
     left: 5,
     width: 60,
     height: 60,
-    resizeMode: "contain",
   },
 
   footer: {
