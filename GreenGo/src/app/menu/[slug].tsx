@@ -110,7 +110,7 @@ export default function DynamicCategoryMenu() {
 
       setImages(imagesData || []);
     } catch (err: any) {
-      console.log("Dynamic category error:", err);
+      console.error("Dynamic category error:", err);
 
       setError(
         err?.message || "Could not load category."
