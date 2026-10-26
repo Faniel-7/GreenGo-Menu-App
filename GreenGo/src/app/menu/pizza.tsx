@@ -28,13 +28,13 @@ export default function Pizza() {
         .order("id", { ascending: true });
 
       if (error) {
-        console.log("Pizza items error:", error);
+        console.error("Pizza items error:", error);
         return;
       }
 
       setItems(data || []);
     } catch (error) {
-      console.log("Pizza loading error:", error);
+      console.error("Pizza loading error:", error);
     } finally {
       setLoading(false);
     }
