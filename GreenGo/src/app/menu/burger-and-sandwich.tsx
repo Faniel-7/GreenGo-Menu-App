@@ -35,7 +35,7 @@ export default function CategoryScreen() {
 
 
   if (error) {
-    console.log("Burger fetch error:", error);
+    console.error("Burger fetch error:", error);
     return;
   }
 
@@ -48,37 +48,40 @@ useEffect(() => {
 }, []);
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        {
-  isLargeScreen && (
-    <View style={styles.DesktopDevider} />
-  )
-}
-        {isMobile && (
-  <TouchableOpacity
-    style={styles.settings}
-    onPress={() => setSidebarVisible(!sidebarVisible)}
-  >
-    <Ionicons
-      name="menu"
-      size={32}
-      color="#fff"
-    />
-  </TouchableOpacity>
-)}
-            
-            <Sidebar
-  visible={isLargeScreen ? true : sidebarVisible}
-  onClose={() => setSidebarVisible(false)}
-/>
-            
+    <View style={styles.container}>
+      {isLargeScreen ? (
+        <View style={styles.desktopSidebar}>
+          <Sidebar
+            visible={true}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </View>
+      ) : (
+        <>
+          {isMobile && (
+            <TouchableOpacity
+              style={styles.settings}
+              onPress={() => setSidebarVisible(!sidebarVisible)}
+            >
+              <Ionicons name="menu" size={32} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Sidebar
+            visible={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </>
+      )}
+
+      <ScrollView
+        style={styles.menuScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {isLargeScreen && <View style={styles.DesktopDevider} />}
 
         <View style={styles.leftSide}>
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/logo.png")}
             style={styles.logo}
           />
@@ -246,39 +249,39 @@ useEffect(() => {
             )}
           
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/burger/burger1.png")}
             style={styles.burgerTop}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/burger/burger2.png")}
             style={styles.burgerMiddle}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/burger/burger8.png")}
             style={styles.burgerBottom}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/burger/burger11.png")}
             style={styles.sandwichBottom}
           />
 
 
           
-<Image
+<Image resizeMode="contain"
             source={require("../../../assets/images/leaf-1.png")}
             style={styles.leaf1}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-2.png")}
             style={styles.leaf2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-3.png")}
             style={styles.leaf3}
           />
@@ -297,7 +300,8 @@ useEffect(() => {
 
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -305,6 +309,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#030303",
+    position: "relative",
+  },
+
+  menuScroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  desktopSidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 270,
+    height: "100%",
+    zIndex: 1000,
   },
 
   content: {
@@ -327,7 +346,6 @@ rightSide: {
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -430,7 +448,6 @@ burgerTop: {
   right: isLargeScreen ? 120 : -35,
   width: isLargeScreen ? 420 : 300,
   height: isLargeScreen ? 420 : 300,
-  resizeMode: "contain",
 },
 
 burgerMiddle: {
@@ -439,7 +456,6 @@ burgerMiddle: {
   right: isLargeScreen ? 120 : -35,
   width: isLargeScreen ? 340 : 250,
   height: isLargeScreen ? 340 : 250,
-  resizeMode: "contain",
 },
 
 burgerBottom: {
@@ -448,7 +464,6 @@ burgerBottom: {
   right: isLargeScreen ? 320 : -25,
   width: isLargeScreen ? 300 : 250,
   height: isLargeScreen ? 300 : 250,
-  resizeMode: "contain",
 },
 
 sandwichBottom: {
@@ -457,7 +472,6 @@ sandwichBottom: {
   right: isLargeScreen ? 30 : -27,
   width: isLargeScreen ? 300 : 220,
   height: isLargeScreen ? 300 : 220,
-  resizeMode: "contain",
 },
 
   badge: {
@@ -498,7 +512,6 @@ sandwichBottom: {
     left: 52,
     width: 70,
     height: 70,
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -507,7 +520,6 @@ sandwichBottom: {
     left: 45,
     width: 80,
     height: 80,
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -516,7 +528,6 @@ sandwichBottom: {
     left: 40,
     width: 60,
     height: 60,
-    resizeMode: "contain",
   },
 
   footer: {
