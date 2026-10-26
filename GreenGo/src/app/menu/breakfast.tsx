@@ -35,7 +35,7 @@ export default function Category() {
 
 
   if (error) {
-    console.log("Breakfast fetch error:", error);
+    console.error("Breakfast fetch error:", error);
     return;
   }
 
@@ -49,38 +49,40 @@ export default function Category() {
     }, []);
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        {
-  isLargeScreen && (
-    <View style={styles.DesktopDevider} />
-  )
-}
+    <View style={styles.container}>
+      {isLargeScreen ? (
+        <View style={styles.desktopSidebar}>
+          <Sidebar
+            visible={true}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </View>
+      ) : (
+        <>
+          {isMobile && (
+            <TouchableOpacity
+              style={styles.settings}
+              onPress={() => setSidebarVisible(!sidebarVisible)}
+            >
+              <Ionicons name="menu" size={32} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Sidebar
+            visible={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </>
+      )}
 
-        {isMobile && (
-  <TouchableOpacity
-    style={styles.settings}
-    onPress={() => setSidebarVisible(!sidebarVisible)}
-  >
-    <Ionicons
-      name="menu"
-      size={32}
-      color="#fff"
-    />
-  </TouchableOpacity>
-)}
-            
-            <Sidebar
-  visible={isLargeScreen ? true : sidebarVisible}
-  onClose={() => setSidebarVisible(false)}
-/>
-            
+      <ScrollView
+        style={styles.menuScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {isLargeScreen && <View style={styles.DesktopDevider} />}
 
         <View style={styles.leftSide}>
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/logo.png")}
             style={styles.logo}
           />
@@ -238,38 +240,38 @@ export default function Category() {
                         </View>
                       )}
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/breakfast/breakfast3.png")}
             style={styles.breakfastTop}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/breakfast/breakfast4.png")}
             style={styles.breakfastMiddle}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/breakfast/breakfast1.png")}
             style={styles.breakfastBottom}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/breakfast/breakfast2.png")}
             style={styles.breakfastBottom2}
           />
 
           
-<Image
+<Image resizeMode="contain"
             source={require("../../../assets/images/leaf-1.png")}
             style={styles.leaf1}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-2.png")}
             style={styles.leaf2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-3.png")}
             style={styles.leaf3}
           />
@@ -288,7 +290,8 @@ export default function Category() {
 
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -296,6 +299,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#030303",
+    position: "relative",
+  },
+
+  menuScroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  desktopSidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 270,
+    height: "100%",
+    zIndex: 1000,
   },
 
   content: {
@@ -318,7 +336,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -421,7 +438,6 @@ const styles = StyleSheet.create({
   right: isLargeScreen ? 60 : -90,
   width: isLargeScreen ? 600 : 340,
   height: isLargeScreen ? 600 : 340,
-  resizeMode: "contain",
 },
 
 breakfastMiddle: {
@@ -430,7 +446,6 @@ breakfastMiddle: {
   right: isLargeScreen ? 60 : -45,
   width: isLargeScreen ? 520 : 350,
   height: isLargeScreen ? 520 : 350,
-  resizeMode: "contain",
 },
 
 breakfastBottom: {
@@ -439,7 +454,6 @@ breakfastBottom: {
   right: isLargeScreen ? 350 : -40,
   width: isLargeScreen ? 280 : 220,
   height: isLargeScreen ? 280 : 220,
-  resizeMode: "contain",
 },
 
 breakfastBottom2: {
@@ -448,7 +462,6 @@ breakfastBottom2: {
   right: isLargeScreen ? -70 : -40,
   width: isLargeScreen ? 430 : 260,
   height: isLargeScreen ? 430 : 260,
-  resizeMode: "contain",
 },
 
   badge: {
@@ -489,7 +502,6 @@ breakfastBottom2: {
     left: 52,
     width: 70,
     height: 70,
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -498,7 +510,6 @@ breakfastBottom2: {
     left: 45,
     width: 80,
     height: 80,
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -507,7 +518,6 @@ breakfastBottom2: {
     left: 5,
     width: 60,
     height: 60,
-    resizeMode: "contain",
   },
 
   footer: {
