@@ -34,7 +34,7 @@ export default function Category() {
 
 
   if (error) {
-    console.log("Chinese fetch error:", error);
+    console.error("Chinese fetch error:", error);
     return;
   }
 
@@ -48,37 +48,40 @@ useEffect(() => {
 }, []);
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        {
-  isLargeScreen && (
-    <View style={styles.DesktopDevider} />
-  )
-}
-        {isMobile && (
-  <TouchableOpacity
-    style={styles.settings}
-    onPress={() => setSidebarVisible(!sidebarVisible)}
-  >
-    <Ionicons
-      name="menu"
-      size={32}
-      color="#fff"
-    />
-  </TouchableOpacity>
-)}
-            
-            <Sidebar
-  visible={isLargeScreen ? true : sidebarVisible}
-  onClose={() => setSidebarVisible(false)}
-/>
-            
+    <View style={styles.container}>
+      {isLargeScreen ? (
+        <View style={styles.desktopSidebar}>
+          <Sidebar
+            visible={true}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </View>
+      ) : (
+        <>
+          {isMobile && (
+            <TouchableOpacity
+              style={styles.settings}
+              onPress={() => setSidebarVisible(!sidebarVisible)}
+            >
+              <Ionicons name="menu" size={32} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Sidebar
+            visible={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </>
+      )}
+
+      <ScrollView
+        style={styles.menuScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {isLargeScreen && <View style={styles.DesktopDevider} />}
 
         <View style={styles.leftSide}>
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/logo.png")}
             style={styles.logo}
           />
@@ -245,33 +248,33 @@ useEffect(() => {
                         </View>
                       )}
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/chinese/chinese2.png")}
             style={styles.chineseTop}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/chinese/chinese11.png")}
             style={styles.chineseMiddle}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/chinese/chinese7.png")}
             style={styles.chineseBottom}
           />
 
           
-<Image
+<Image resizeMode="contain"
             source={require("../../../assets/images/leaf-1.png")}
             style={styles.leaf1}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-2.png")}
             style={styles.leaf2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-3.png")}
             style={styles.leaf3}
           />
@@ -290,7 +293,8 @@ useEffect(() => {
 
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -298,6 +302,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#030303",
+    position: "relative",
+  },
+
+  menuScroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  desktopSidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 270,
+    height: "100%",
+    zIndex: 1000,
   },
 
   content: {
@@ -320,7 +339,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -423,7 +441,6 @@ const styles = StyleSheet.create({
   right: isLargeScreen ? 150 : -10,
   width: isLargeScreen ? 320 : 185,
   height: isLargeScreen ? 320 : 185,
-  resizeMode: "contain",
 },
 
   chineseMiddle: {
@@ -432,7 +449,6 @@ const styles = StyleSheet.create({
   right: isLargeScreen ? 120 : -50,
   width: isLargeScreen ? 410 : 260,
   height: isLargeScreen ? 410 : 260,
-  resizeMode: "contain",
 },
 
   chineseBottom: {
@@ -441,7 +457,6 @@ const styles = StyleSheet.create({
   right: isLargeScreen ? 150 : -40,
   width: isLargeScreen ? 280 : 220,
   height: isLargeScreen ? 280 : 220,
-  resizeMode: "contain",
 },
 
   badge: {
@@ -482,7 +497,6 @@ const styles = StyleSheet.create({
     left: 52,
     width: 70,
     height: 70,
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -491,7 +505,6 @@ const styles = StyleSheet.create({
     left: 45,
     width: 80,
     height: 80,
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -500,7 +513,6 @@ const styles = StyleSheet.create({
     left: 5,
     width: 60,
     height: 60,
-    resizeMode: "contain",
   },
 
   footer: {
