@@ -34,7 +34,7 @@ export default function CategoryScreen() {
     .order("id");
 
   if (error) {
-    console.log(error);
+    console.error(error);
     return;
   }
 
@@ -58,38 +58,40 @@ const teaItems = hotDrinkItems.filter(
 );
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        {
-  isLargeScreen && (
-    <View style={styles.DesktopDevider} />
-  )
-}
+    <View style={styles.container}>
+      {isLargeScreen ? (
+        <View style={styles.desktopSidebar}>
+          <Sidebar
+            visible={true}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </View>
+      ) : (
+        <>
+          {isMobile && (
+            <TouchableOpacity
+              style={styles.settings}
+              onPress={() => setSidebarVisible(!sidebarVisible)}
+            >
+              <Ionicons name="menu" size={32} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Sidebar
+            visible={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </>
+      )}
 
-        {isMobile && (
-  <TouchableOpacity
-    style={styles.settings}
-    onPress={() => setSidebarVisible(!sidebarVisible)}
-  >
-    <Ionicons
-      name="menu"
-      size={32}
-      color="#fff"
-    />
-  </TouchableOpacity>
-)}
-            
-            <Sidebar
-  visible={isLargeScreen ? true : sidebarVisible}
-  onClose={() => setSidebarVisible(false)}
-/>
-            
+      <ScrollView
+        style={styles.menuScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {isLargeScreen && <View style={styles.DesktopDevider} />}
 
         <View style={styles.leftSide}>
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/logo.png")}
             style={styles.logo}
           />
@@ -275,43 +277,43 @@ const teaItems = hotDrinkItems.filter(
                                   </View>
                                 )}
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/coffee/coffee4.png")}
             style={styles.coffeeTop}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/coffee/coffee8.png")}
             style={styles.coffeeMiddle}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/coffee/coffee7.png")}
             style={styles.coffeeBottom}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/coffee/coffee6.png")}
             style={styles.coffeeBottom2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/coffee/coffee2.png")}
             style={styles.coffeeBottom3}
           />
 
           
-<Image
+<Image resizeMode="contain"
             source={require("../../../assets/images/leaf-1.png")}
             style={styles.leaf1}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-2.png")}
             style={styles.leaf2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-3.png")}
             style={styles.leaf3}
           />
@@ -330,7 +332,8 @@ const teaItems = hotDrinkItems.filter(
 
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -338,6 +341,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#030303",
+    position: "relative",
+  },
+
+  menuScroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  desktopSidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 270,
+    height: "100%",
+    zIndex: 1000,
   },
 
   content: {
@@ -360,7 +378,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -471,7 +488,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 120 : -80,
   width: isDesktop ? 520 : 330,
   height: isDesktop ? 520 : 330,
-  resizeMode: "contain",
 },
 
   coffeeMiddle: {
@@ -480,7 +496,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 120 : -40,
   width: isDesktop ? 400 : 280,
   height: isDesktop ? 400 : 280,
-  resizeMode: "contain",
 },
 
   coffeeBottom: {
@@ -489,7 +504,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 150 : -40,
   width: isDesktop ? 350 : 320,
   height: isDesktop ? 350 : 320,
-  resizeMode: "contain",
 },
 
   coffeeBottom2: {
@@ -498,7 +512,6 @@ const styles = StyleSheet.create({
   right: isDesktop ? 80 : -70,
   width: isDesktop ? 520 : 310,
   height: isDesktop ? 480 : 210,
-  resizeMode: "contain",
 },
 
 coffeeBottom3: {
@@ -507,7 +520,6 @@ coffeeBottom3: {
   right: isDesktop ? 120 : -10,
   width: isDesktop ? 320 : 220,
   height: isDesktop ? 320 : 220,
-  resizeMode: "contain",
 },
 
   badge: {
@@ -548,7 +560,6 @@ coffeeBottom3: {
     left: -20,
     width: 70,
     height: 70,
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -557,7 +568,6 @@ coffeeBottom3: {
     left: 45,
     width: 80,
     height: 80,
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -566,7 +576,6 @@ coffeeBottom3: {
     left: 8,
     width: 60,
     height: 60,
-    resizeMode: "contain",
   },
 
   footer: {
