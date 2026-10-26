@@ -40,17 +40,31 @@ export function isOfferCurrentlyAvailable(offer, now = new Date()) {
   if (startTime && !validTime(startTime)) return false;
   if (endTime && !validTime(endTime)) return false;
 
-  // Respect the exact start/end time on the first/last scheduled date.
+  const overnight = Boolean(startTime && endTime && startTime > endTime);
+
+  // Respect the start boundary on the first scheduled date.
   if (startDate && current.date === startDate && startTime && current.time < startTime) return false;
-  if (endDate && current.date === endDate && endTime && current.time > endTime) return false;
+
+  // A same-day overnight schedule means the late-night portion of that date.
+  // Do not let the end-time boundary incorrectly hide its 22:00–23:59 portion.
+  if (overnight && startDate && endDate && startDate === endDate) {
+    return current.time >= startTime;
+  }
+
+  // For overnight ranges spanning multiple dates, the end date allows the
+  // after-midnight portion but not a new late-night window after the end date.
+  if (endDate && current.date === endDate && endTime && !overnight && current.time > endTime) return false;
+  if (overnight && endDate && current.date === endDate && current.time >= startTime) return false;
 
   if (startTime && endTime) {
-    if (startTime <= endTime) {
+    if (!overnight) {
       return current.time >= startTime && current.time <= endTime;
     }
     // Overnight window, e.g. 22:00 to 02:00.
     return current.time >= startTime || current.time <= endTime;
   }
+
+  if (endDate && current.date === endDate && endTime && current.time > endTime) return false;
 
   if (startTime && current.time < startTime) return false;
   if (endTime && current.time > endTime) return false;
