@@ -6,7 +6,7 @@ export default function PosterLayout() {
     <>
       {/* Logo */}
 
-      <Image
+      <Image resizeMode="contain"
         source={require("../../assets/images/logo.png")}
         style={styles.logo}
       />
@@ -38,17 +38,17 @@ export default function PosterLayout() {
 
       {/* Pizza images */}
 
-      <Image
+      <Image resizeMode="contain"
         source={require("../../assets/images/pizza-1.png")}
         style={styles.pizzaTop}
       />
 
-      <Image
+      <Image resizeMode="contain"
         source={require("../../assets/images/pizza-2.png")}
         style={styles.pizzaMiddle}
       />
 
-      <Image
+      <Image resizeMode="contain"
         source={require("../../assets/images/pizza-3.png")}
         style={styles.pizzaBottom}
       />
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
     left: 30,
     width: 85,
     height: 85,
-    resizeMode: "contain",
   },
 
   titleWhite: {
@@ -157,7 +156,6 @@ const styles = StyleSheet.create({
     right: -110,
     width: 320,
     height: 320,
-    resizeMode: "contain",
   },
 
   pizzaMiddle: {
@@ -166,7 +164,6 @@ const styles = StyleSheet.create({
     right: -80,
     width: 260,
     height: 260,
-    resizeMode: "contain",
   },
 
   pizzaBottom: {
@@ -175,7 +172,6 @@ const styles = StyleSheet.create({
     right: -110,
     width: 320,
     height: 320,
-    resizeMode: "contain",
   },
 leaf1: {
     position: "absolute",
