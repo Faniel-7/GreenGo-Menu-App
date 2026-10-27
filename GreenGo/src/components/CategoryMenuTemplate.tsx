@@ -146,7 +146,7 @@ export default function CategoryMenuTemplate({
 
               {/* LOGO */}
 
-              <Image
+              <Image resizeMode="contain"
                 source={require("../../assets/images/logo.png")}
                 style={styles.logo}
               />
@@ -401,7 +401,7 @@ export default function CategoryMenuTemplate({
                   ================================================= */}
 
               {menuImages[0] && (
-                <Image
+                <Image resizeMode="contain"
                   source={
                     isPizza
                       ? menuImages[0]
@@ -414,7 +414,7 @@ export default function CategoryMenuTemplate({
               )}
 
               {menuImages[1] && (
-                <Image
+                <Image resizeMode="contain"
                   source={
                     isPizza
                       ? menuImages[1]
@@ -427,7 +427,7 @@ export default function CategoryMenuTemplate({
               )}
 
               {menuImages[2] && (
-                <Image
+                <Image resizeMode="contain"
                   source={
                     isPizza
                       ? menuImages[2]
@@ -443,17 +443,17 @@ export default function CategoryMenuTemplate({
                   LEAVES
                   ================================================= */}
 
-              <Image
+              <Image resizeMode="contain"
                 source={require("../../assets/images/leaf-1.png")}
                 style={styles.leaf1}
               />
 
-              <Image
+              <Image resizeMode="contain"
                 source={require("../../assets/images/leaf-2.png")}
                 style={styles.leaf2}
               />
 
-              <Image
+              <Image resizeMode="contain"
                 source={require("../../assets/images/leaf-3.png")}
                 style={styles.leaf3}
               />
@@ -578,7 +578,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -727,7 +726,6 @@ const styles = StyleSheet.create({
       ? 420
       : 330,
 
-    resizeMode: "contain",
   },
 
   pizzaMiddle: {
@@ -749,7 +747,6 @@ const styles = StyleSheet.create({
       ? 320
       : 240,
 
-    resizeMode: "contain",
   },
 
   pizzaBottom: {
@@ -771,7 +768,6 @@ const styles = StyleSheet.create({
       ? 250
       : 220,
 
-    resizeMode: "contain",
   },
 
   /* =========================================================
@@ -797,7 +793,6 @@ const styles = StyleSheet.create({
       ? 120
       : 70,
 
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -817,7 +812,6 @@ const styles = StyleSheet.create({
       ? 130
       : 80,
 
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -843,7 +837,6 @@ const styles = StyleSheet.create({
       ? 110
       : 60,
 
-    resizeMode: "contain",
   },
 
   /* =========================================================
