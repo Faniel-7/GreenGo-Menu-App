@@ -33,7 +33,7 @@ async function fetchRicePastaWrap() {
     .order("id");
 
   if (error) {
-    console.log(error);
+    console.error(error);
     return;
   }
 
@@ -55,38 +55,40 @@ const wrapItems = foodItems.filter(
 );
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        {
-  isLargeScreen && (
-    <View style={styles.DesktopDevider} />
-  )
-}
+    <View style={styles.container}>
+      {isLargeScreen ? (
+        <View style={styles.desktopSidebar}>
+          <Sidebar
+            visible={true}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </View>
+      ) : (
+        <>
+          {isMobile && (
+            <TouchableOpacity
+              style={styles.settings}
+              onPress={() => setSidebarVisible(!sidebarVisible)}
+            >
+              <Ionicons name="menu" size={32} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Sidebar
+            visible={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+          />
+        </>
+      )}
 
-        {isMobile && (
-  <TouchableOpacity
-    style={styles.settings}
-    onPress={() => setSidebarVisible(!sidebarVisible)}
-  >
-    <Ionicons
-      name="menu"
-      size={32}
-      color="#fff"
-    />
-  </TouchableOpacity>
-)}
-            
-            <Sidebar
-  visible={isLargeScreen ? true : sidebarVisible}
-  onClose={() => setSidebarVisible(false)}
-/>
-            
+      <ScrollView
+        style={styles.menuScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          {isLargeScreen && <View style={styles.DesktopDevider} />}
 
         <View style={styles.leftSide}>
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/logo.png")}
             style={styles.logo}
           />
@@ -268,38 +270,38 @@ const wrapItems = foodItems.filter(
                         </View>
                       )}
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/rice/rice2.png")}
             style={styles.riceTop}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/rice/rice8.png")}
             style={styles.riceMiddle}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/rice/rice4.png")}
             style={styles.riceBottom}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/rice/rice6.png")}
             style={styles.riceBottom2}
           />
 
           
-<Image
+<Image resizeMode="contain"
             source={require("../../../assets/images/leaf-1.png")}
             style={styles.leaf1}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-2.png")}
             style={styles.leaf2}
           />
 
-          <Image
+          <Image resizeMode="contain"
             source={require("../../../assets/images/leaf-3.png")}
             style={styles.leaf3}
           />
@@ -318,7 +320,8 @@ const wrapItems = foodItems.filter(
 
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -326,6 +329,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#030303",
+    position: "relative",
+  },
+
+  menuScroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  desktopSidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 270,
+    height: "100%",
+    zIndex: 1000,
   },
 
   content: {
@@ -348,7 +366,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 105,
     height: 105,
-    resizeMode: "contain",
     marginBottom: 10,
     left: 30,
   },
@@ -457,7 +474,6 @@ riceTop: {
   right: isLargeScreen ? 180 : -18,
   width: isLargeScreen ? 350 : 200,
   height: isLargeScreen ? 350 : 200,
-  resizeMode: "contain",
 },
 
 riceMiddle: {
@@ -466,7 +482,6 @@ riceMiddle: {
   right: isLargeScreen ? 60 : -50,
   width: isLargeScreen ? 500 : 240,
   height: isLargeScreen ? 500 : 240,
-  resizeMode: "contain",
 },
 
 riceBottom: {
@@ -475,7 +490,6 @@ riceBottom: {
   right: isLargeScreen ? 190 : -85,
   width: isLargeScreen ? 490: 280,
   height: isLargeScreen ? 490 : 280,
-  resizeMode: "contain",
 },
 
 riceBottom2: {
@@ -484,7 +498,6 @@ riceBottom2: {
   right: isLargeScreen ? -100 : -60,
   width: isLargeScreen ? 400 : 320,
   height: isLargeScreen ? 400 : 320,
-  resizeMode: "contain",
 },
 
   badge: {
@@ -525,7 +538,6 @@ riceBottom2: {
     left: 52,
     width: 70,
     height: 70,
-    resizeMode: "contain",
   },
 
   leaf2: {
@@ -534,7 +546,6 @@ riceBottom2: {
     left: 45,
     width: 80,
     height: 80,
-    resizeMode: "contain",
   },
 
   leaf3: {
@@ -543,7 +554,6 @@ riceBottom2: {
     left: 5,
     width: 60,
     height: 60,
-    resizeMode: "contain",
   },
 
   footer: {
