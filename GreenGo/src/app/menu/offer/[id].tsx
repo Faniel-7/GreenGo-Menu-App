@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -47,7 +46,15 @@ export default function OfferDetails() {
           .single();
 
       if (offerError) {
-        console.log("OFFER ERROR:", offerError);
+        console.error("OFFER ERROR:", offerError);
+        setOffer(null);
+        setLoading(false);
+        return;
+      }
+
+      // Show active offers even when their scheduled start time is in the future.
+      // Inactive offers remain hidden from customers.
+      if (offerData.active !== true) {
         setOffer(null);
         setLoading(false);
         return;
@@ -63,7 +70,7 @@ export default function OfferDetails() {
           .eq("offer_id", id);
 
       if (groupLinksError) {
-        console.log("OFFER TARGET GROUPS ERROR:", groupLinksError);
+        console.error("OFFER TARGET GROUPS ERROR:", groupLinksError);
         setOfferGroups([]);
       } else if (groupLinks && groupLinks.length > 0) {
         const groupIds = groupLinks.map(
@@ -77,7 +84,7 @@ export default function OfferDetails() {
             .in("id", groupIds);
 
         if (groupsError) {
-          console.log("TARGET GROUP NAMES ERROR:", groupsError);
+          console.error("TARGET GROUP NAMES ERROR:", groupsError);
           setOfferGroups([]);
         } else {
           setOfferGroups(groups || []);
@@ -94,7 +101,7 @@ export default function OfferDetails() {
           .eq("offer_id", id);
 
       if (offerItemError) {
-        console.log("OFFER ITEMS ERROR:", offerItemError);
+        console.error("OFFER ITEMS ERROR:", offerItemError);
         setOfferItems([]);
         setLoading(false);
         return;
@@ -113,7 +120,7 @@ export default function OfferDetails() {
             .in("id", itemIds);
 
         if (menuError) {
-          console.log("MENU ITEMS ERROR:", menuError);
+          console.error("MENU ITEMS ERROR:", menuError);
           setOfferItems([]);
         } else {
           const combinedItems = offerItemData.map(
@@ -135,7 +142,7 @@ export default function OfferDetails() {
         setOfferItems([]);
       }
     } catch (error) {
-      console.log("LOAD OFFER ERROR:", error);
+      console.error("LOAD OFFER ERROR:", error);
     } finally {
       setLoading(false);
     }
