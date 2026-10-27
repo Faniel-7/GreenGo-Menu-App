@@ -48,7 +48,7 @@ export default function Sidebar({
     Animated.timing(slideAnim, {
       toValue: visible ? 0 : -300,
       duration: 300,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
   }, [visible]);
 
@@ -64,7 +64,7 @@ const fetchCategories = async () => {
     .order("id");
 
   if (error) {
-    console.log("Category error:", error);
+    console.error("Category error:", error);
     return;
   }
 
@@ -76,12 +76,12 @@ const fetchCategories = async () => {
 const fetchOffers = async () => {
   const { data, error } = await supabase
     .from("offers")
-    .select("id, title, type, image_url, active, start_date, end_date")
+    .select("id, title, type, image_url, active, start_date, end_date, start_time, end_time")
     .eq("active", true)
     .order("id", { ascending: false });
 
   if (error) {
-    console.log("Offer error:", error);
+    console.error("Offer error:", error);
     return;
   }
 
@@ -176,36 +176,42 @@ const getCategoryIcon = (name: string): string => {
           </TouchableOpacity>
         ))}
 
-        {offers.length > 0 && (
-  <View style={styles.offerSection}>
-    <View style={styles.offerDivider} />
+        <View style={styles.offerSection}>
+          <View style={styles.offerDivider} />
 
-    <Text style={styles.offerSectionTitle}>
-      ✨ OFFERS
-    </Text>
+          <Text style={styles.offerSectionTitle}>
+            ✨ OFFERS
+          </Text>
 
-    <TouchableOpacity
-      style={styles.offerMenuItem}
-      onPress={() => {
-        onClose();
-        router.push("/menu/offers" as any);
-      }}
-    >
-      <Text style={styles.offerIcon}>
-        🎁
-      </Text>
+          <TouchableOpacity
+            style={styles.offerMenuItem}
+            accessibilityRole="button"
+            accessibilityLabel="Special Offers"
+            onPress={() => {
+              onClose();
+              router.push("/menu/offers" as any);
+            }}
+          >
+            <Text style={styles.offerIcon}>🎁</Text>
+            <Text style={styles.offerMenuText}>Special Offers</Text>
+            {offers.length > 0 && (
+              <Text style={styles.offerCount}>{offers.length}</Text>
+            )}
+          </TouchableOpacity>
+        </View>
 
-      <Text style={styles.offerMenuText}>
-        Special Offers
-      </Text>
-
-      <Text style={styles.offerCount}>
-        {offers.length}
-      </Text>
-    </TouchableOpacity>
-  </View>
-)}
-
+        <TouchableOpacity
+          style={styles.adminAccess}
+          accessibilityRole="button"
+          accessibilityLabel="Admin login"
+          onPress={() => {
+            onClose();
+            router.push("/admin/login" as any);
+          }}
+        >
+          <Ionicons name="lock-closed-outline" size={12} color="rgba(255,255,255,0.28)" />
+          <Text style={styles.adminAccessText}>Admin</Text>
+        </TouchableOpacity>
       </ScrollView>
       </Animated.View>
     </TouchableOpacity>
