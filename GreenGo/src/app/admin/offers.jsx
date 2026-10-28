@@ -457,8 +457,6 @@ description_en:descriptionEn,
 
 description_ti:descriptionLocal,
 
-promotion_details: promotionDetails.trim() || null,
-
 discount_percentage: discount,
 
 start_date:startDate.trim()
