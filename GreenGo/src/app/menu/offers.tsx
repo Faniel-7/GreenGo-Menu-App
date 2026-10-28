@@ -44,10 +44,9 @@ export default function OffersPage() {
       .eq("active", true)
       .order("id", { ascending: false });
 
-    console.log("OFFERS DATA:", data);
-    console.log("OFFERS ERROR:", error);
-
     if (error) {
+      console.error("Failed to load offers:", error);
+      setOffers([]);
       setLoading(false);
       return;
     }
