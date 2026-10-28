@@ -79,7 +79,7 @@ export default function OffersList({
 
     catch (error) {
 
-      console.log(
+      console.error(
         "LOAD OFFERS ERROR:",
         error
       );
@@ -114,10 +114,10 @@ export default function OffersList({
 
       setDeleting(true);
 
-      console.log(
-        "Deleting offer:",
-        id
-      );
+      
+
+
+
 
 
       /*
@@ -137,7 +137,7 @@ export default function OffersList({
 
       if (offerItemsError) {
 
-        console.log(
+        console.error(
           "OFFER ITEMS DELETE ERROR:",
           offerItemsError
         );
@@ -147,9 +147,9 @@ export default function OffersList({
       }
 
 
-      console.log(
-        "Offer items deleted"
-      );
+      
+
+
 
 
       /*
@@ -169,7 +169,7 @@ export default function OffersList({
 
       if (targetGroupsError) {
 
-        console.log(
+        console.error(
           "TARGET GROUP DELETE ERROR:",
           targetGroupsError
         );
@@ -179,9 +179,9 @@ export default function OffersList({
       }
 
 
-      console.log(
-        "Offer target groups deleted"
-      );
+      
+
+
 
 
       /*
@@ -200,7 +200,7 @@ export default function OffersList({
 
       if (offerError) {
 
-        console.log(
+        console.error(
           "OFFER DELETE ERROR:",
           offerError
         );
@@ -210,10 +210,10 @@ export default function OffersList({
       }
 
 
-      console.log(
-        "Offer deleted successfully:",
-        id
-      );
+      
+
+
+
 
 
       /*
@@ -248,7 +248,7 @@ export default function OffersList({
 
     catch (error) {
 
-      console.log(
+      console.error(
         "DELETE OFFER ERROR:",
         error
       );
@@ -275,10 +275,10 @@ export default function OffersList({
    */
 
   function askDelete(id) {
-console.log(
-      "Delete button pressed:",
-      id
-    );
+
+
+
+
 
     setDeleteId(id);
 
@@ -332,7 +332,7 @@ console.log(
 
     catch (error) {
 
-      console.log(
+      console.error(
         "TOGGLE OFFER ERROR:",
         error
       );
@@ -464,7 +464,7 @@ console.log(
                                 }
                               >
 
-                                <Image
+                                <Image resizeMode="contain"
                                   source={{
                                     uri:
                                       offer.image_url,
@@ -1008,9 +1008,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#222",
 
-    shadowColor: "#000",
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.4)",
     elevation: 5,
   },
 
@@ -1031,7 +1029,6 @@ const styles = StyleSheet.create({
   offerImage: {
     width: "100%",
     backgroundColor: "#111",
-    resizeMode: "contain",
   },
 
 
