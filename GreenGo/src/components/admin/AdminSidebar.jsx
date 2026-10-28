@@ -38,7 +38,7 @@ const {data,error}=await supabase
 
 
 if(error){
-console.log(error);
+console.error(error);
 return;
 }
 
