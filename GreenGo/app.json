@@ -6,12 +6,17 @@
     "orientation": "portrait",
     "scheme": "greengo",
     "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/greengo-app-icon.png",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/greengo-app-icon.png"
     },
     "android": {
-      "adaptiveIcon": {},
-      "predictiveBackGestureEnabled": false
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/greengo-app-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.greengo.menu"
     },
     "web": {
       "output": "static"
@@ -34,6 +39,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a7bcbdc0-acb9-4dac-8860-c6db2abd3ebf"
+      }
     }
   }
 }
