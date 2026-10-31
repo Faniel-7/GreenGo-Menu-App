@@ -159,29 +159,19 @@ Explore the GreenGo interface on desktop and mobile devices.
 <details>
 <summary><strong>View Desktop Screenshots</strong></summary>
 
-<p align="center">
-  <a href="screenshots/1.png"><img src="screenshots/1.png" width="48%" alt="GreenGo Desktop Screenshot 1" /></a>
-  <a href="screenshots/3.png"><img src="screenshots/3.png" width="48%" alt="GreenGo Desktop Screenshot 3" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/5.png"><img src="screenshots/5.png" width="48%" alt="GreenGo Desktop Screenshot 5" /></a>
-  <a href="screenshots/7.png"><img src="screenshots/7.png" width="48%" alt="GreenGo Desktop Screenshot 7" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/10.png"><img src="screenshots/10.png" width="48%" alt="GreenGo Desktop Screenshot 10" /></a>
-  <a href="screenshots/14.png"><img src="screenshots/14.png" width="48%" alt="GreenGo Desktop Screenshot 14" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/16.png"><img src="screenshots/16.png" width="48%" alt="GreenGo Desktop Screenshot 16" /></a>
-  <a href="screenshots/20.png"><img src="screenshots/20.png" width="48%" alt="GreenGo Desktop Screenshot 20" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/21.png"><img src="screenshots/21.png" width="48%" alt="GreenGo Desktop Screenshot 21" /></a>
-</p>
+<table>
+  <tr>
+    <td><a href="screenshots/1.png"><img src="screenshots/1.png" width="280" alt="Desktop Screenshot 1"></a></td>
+    <td><a href="screenshots/3.png"><img src="screenshots/3.png" width="280" alt="Desktop Screenshot 3"></a></td>
+    <td><a href="screenshots/5.png"><img src="screenshots/5.png" width="280" alt="Desktop Screenshot 5"></a></td>
+    <td><a href="screenshots/7.png"><img src="screenshots/7.png" width="280" alt="Desktop Screenshot 7"></a></td>
+    <td><a href="screenshots/10.png"><img src="screenshots/10.png" width="280" alt="Desktop Screenshot 10"></a></td>
+    <td><a href="screenshots/14.png"><img src="screenshots/14.png" width="280" alt="Desktop Screenshot 14"></a></td>
+    <td><a href="screenshots/16.png"><img src="screenshots/16.png" width="280" alt="Desktop Screenshot 16"></a></td>
+    <td><a href="screenshots/20.png"><img src="screenshots/20.png" width="280" alt="Desktop Screenshot 20"></a></td>
+    <td><a href="screenshots/21.png"><img src="screenshots/21.png" width="280" alt="Desktop Screenshot 21"></a></td>
+  </tr>
+</table>
 
 </details>
 
@@ -190,29 +180,22 @@ Explore the GreenGo interface on desktop and mobile devices.
 <details>
 <summary><strong>View Mobile Screenshots</strong></summary>
 
-<p align="center">
-  <a href="screenshots/2.png"><img src="screenshots/2.png" width="30%" alt="GreenGo Mobile Screenshot 2" /></a>
-  <a href="screenshots/4.png"><img src="screenshots/4.png" width="30%" alt="GreenGo Mobile Screenshot 4" /></a>
-  <a href="screenshots/6.png"><img src="screenshots/6.png" width="30%" alt="GreenGo Mobile Screenshot 6" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/8.png"><img src="screenshots/8.png" width="30%" alt="GreenGo Mobile Screenshot 8" /></a>
-  <a href="screenshots/9.png"><img src="screenshots/9.png" width="30%" alt="GreenGo Mobile Screenshot 9" /></a>
-  <a href="screenshots/11.png"><img src="screenshots/11.png" width="30%" alt="GreenGo Mobile Screenshot 11" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/12.png"><img src="screenshots/12.png" width="30%" alt="GreenGo Mobile Screenshot 12" /></a>
-  <a href="screenshots/13.png"><img src="screenshots/13.png" width="30%" alt="GreenGo Mobile Screenshot 13" /></a>
-  <a href="screenshots/15.png"><img src="screenshots/15.png" width="30%" alt="GreenGo Mobile Screenshot 15" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/17.png"><img src="screenshots/17.png" width="30%" alt="GreenGo Mobile Screenshot 17" /></a>
-  <a href="screenshots/18.png"><img src="screenshots/18.png" width="30%" alt="GreenGo Mobile Screenshot 18" /></a>
-  <a href="screenshots/19.png"><img src="screenshots/19.png" width="30%" alt="GreenGo Mobile Screenshot 19" /></a>
-</p>
+<table>
+  <tr>
+    <td><a href="screenshots/2.png"><img src="screenshots/2.png" width="150" alt="Mobile Screenshot 2"></a></td>
+    <td><a href="screenshots/4.png"><img src="screenshots/4.png" width="150" alt="Mobile Screenshot 4"></a></td>
+    <td><a href="screenshots/6.png"><img src="screenshots/6.png" width="150" alt="Mobile Screenshot 6"></a></td>
+    <td><a href="screenshots/8.png"><img src="screenshots/8.png" width="150" alt="Mobile Screenshot 8"></a></td>
+    <td><a href="screenshots/9.png"><img src="screenshots/9.png" width="150" alt="Mobile Screenshot 9"></a></td>
+    <td><a href="screenshots/11.png"><img src="screenshots/11.png" width="150" alt="Mobile Screenshot 11"></a></td>
+    <td><a href="screenshots/12.png"><img src="screenshots/12.png" width="150" alt="Mobile Screenshot 12"></a></td>
+    <td><a href="screenshots/13.png"><img src="screenshots/13.png" width="150" alt="Mobile Screenshot 13"></a></td>
+    <td><a href="screenshots/15.png"><img src="screenshots/15.png" width="150" alt="Mobile Screenshot 15"></a></td>
+    <td><a href="screenshots/17.png"><img src="screenshots/17.png" width="150" alt="Mobile Screenshot 17"></a></td>
+    <td><a href="screenshots/18.png"><img src="screenshots/18.png" width="150" alt="Mobile Screenshot 18"></a></td>
+    <td><a href="screenshots/19.png"><img src="screenshots/19.png" width="150" alt="Mobile Screenshot 19"></a></td>
+  </tr>
+</table>
 
 </details>
 
