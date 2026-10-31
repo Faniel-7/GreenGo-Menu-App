@@ -1,273 +1,250 @@
-# 🌿 GreenGo — Digital Restaurant Menu
+# 🍃 GreenGo – Digital Restaurant Menu
 
 <p align="center">
-  <img src="assets/greengo-banner.png" alt="GreenGo — Digital Restaurant Menu" width="100%" />
+  <img src="assets/greengo-banner.png" alt="GreenGo Digital Restaurant Menu Banner" width="100%" />
 </p>
 
 <p align="center">
-  <strong>A modern digital menu experience for restaurants.</strong>
+  <strong>A modern QR-based digital menu experience for restaurants.</strong>
   <br />
-  Browse menus, explore special offers, and discover restaurant selections through a simple QR-code experience.
+  Browse menus, explore special offers, and manage restaurant content — all in one place.
 </p>
 
 <p align="center">
-  <a href="https://greengo-menu.netlify.app/"><img src="https://img.shields.io/badge/Live_Demo-Visit_GreenGo-75B843?style=for-the-badge&logo=netlify&logoColor=white" alt="Live Demo" /></a>
-  <a href="https://github.com/Faniel-7/GreenGo-Menu-App"><img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github" alt="GitHub" /></a>
-  <img src="https://img.shields.io/badge/Platform-Android%20%7C%20Web-4385F5?style=for-the-badge" alt="Platforms" />
-  <img src="https://img.shields.io/badge/License-MIT-75B843?style=for-the-badge" alt="MIT License" />
+  <a href="https://greengo-menu.netlify.app/">
+    <img src="https://img.shields.io/badge/Live%20Demo-Visit%20GreenGo-2E8B57?style=for-the-badge&logo=netlify&logoColor=white" alt="Live Demo" />
+  </a>
+  <a href="https://github.com/Faniel-7/GreenGo-Menu-App">
+    <img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github" alt="GitHub Repository" />
+  </a>
+  <img src="https://img.shields.io/badge/Platform-Web%20%7C%20Android-2E8B57?style=for-the-badge" alt="Platforms" />
+  <img src="https://img.shields.io/badge/Status-Active-2E8B57?style=for-the-badge" alt="Project Status" />
 </p>
 
 ---
 
-## 📑 Table of Contents
+## 📖 Table of Contents
 
-- [🌿 GreenGo — Digital Restaurant Menu](#-greengo--digital-restaurant-menu)
-  - [📑 Table of Contents](#-table-of-contents)
-  - [✨ About](#-about)
+- [🍃 GreenGo – Digital Restaurant Menu](#-greengo--digital-restaurant-menu)
+  - [📖 Table of Contents](#-table-of-contents)
+  - [🍃 About GreenGo](#-about-greengo)
     - [🎯 Project Goals](#-project-goals)
-  - [🚀 Features](#-features)
-  - [👨‍🍳 Customer Experience](#-customer-experience)
-    - [What customers can do](#what-customers-can-do)
-  - [⚙️ Admin Dashboard](#️-admin-dashboard)
-    - [Menu Management](#menu-management)
-    - [Offer Management](#offer-management)
-  - [🎁 Special Offers](#-special-offers)
-  - [📸 Screenshots \& Preview](#-screenshots--preview)
-  - [🛠️ Built With](#️-built-with)
+  - [✨ Key Features](#-key-features)
+  - [📱 Customer Experience](#-customer-experience)
+    - [How It Works](#how-it-works)
+  - [🛠️ Admin Dashboard](#️-admin-dashboard)
+    - [Category Management](#category-management)
+    - [Menu Item Management](#menu-item-management)
+    - [Administration \& Access](#administration--access)
+  - [🎉 Special Offers](#-special-offers)
+    - [Available Offer Management](#available-offer-management)
+  - [📸 Screenshots](#-screenshots)
+    - [🖥️ Desktop Experience](#️-desktop-experience)
+    - [📲 Mobile Experience](#-mobile-experience)
+  - [💻 Technology Stack](#-technology-stack)
   - [📂 Project Structure](#-project-structure)
-  - [💻 Getting Started](#-getting-started)
-  - [📦 Installation](#-installation)
+  - [🚀 Getting Started](#-getting-started)
+  - [📥 Installation](#-installation)
   - [▶️ Running the Project](#️-running-the-project)
-  - [🗺️ Roadmap](#️-roadmap)
+  - [🛣️ Future Improvements](#️-future-improvements)
   - [🤝 Contributing](#-contributing)
   - [👨‍💻 About the Developer](#-about-the-developer)
   - [📄 License](#-license)
 
 ---
 
-## ✨ About
+## 🍃 About GreenGo
 
-**GreenGo** is a digital restaurant menu application designed to make restaurant menus more accessible, attractive, and easier to manage.
+**GreenGo** is a digital restaurant menu application designed to make menu browsing easier for customers and menu management more convenient for restaurant administrators.
 
-Instead of relying on traditional printed menus, customers can scan a QR code and access the restaurant's menu directly through their mobile devices.
+Instead of relying only on printed menus, restaurants can provide customers with a QR code that opens their digital menu directly in a mobile browser. Customers can explore food and drink categories, view menu items and prices, and discover current promotions without installing an application.
 
-GreenGo also provides an administration dashboard where restaurant administrators can manage menu categories, menu items, prices, images, and special offers without manually changing the customer-facing application.
+GreenGo also includes an administration dashboard that allows authorized administrators to manage menu categories, food items, prices, images, and special offers.
 
-The project focuses on delivering a clean customer experience alongside a practical menu management system.
+The project is built with **React Native, Expo, and Supabase**, with support for both Android and Web.
 
 ### 🎯 Project Goals
 
-- Replace traditional printed menus with a digital alternative.
 - Make restaurant menus accessible through QR codes.
-- Provide an attractive and responsive browsing experience.
-- Allow administrators to manage menu content dynamically.
-- Make special offers easier to create, schedule, and display.
-
-<p align="center">
-  <a href="https://greengo-menu.netlify.app/">🌐 Explore the Live Application</a>
-</p>
+- Provide customers with a clean and convenient browsing experience.
+- Make menu updates easier without repeatedly printing menus.
+- Give administrators control over menu content and promotions.
+- Provide a responsive experience across mobile and desktop screens.
 
 ---
 
-## 🚀 Features
+## ✨ Key Features
 
 | Feature | Description |
 |---|---|
-| 📱 QR Menu Access | Customers can access the digital menu through a QR-code link. |
-| 📋 Dynamic Menu | Browse categories and available menu items. |
-| 🖼️ Category Posters | Attractive visual posters for menu categories. |
-| 💰 Price Management | Administrators can update menu prices. |
-| 🎁 Special Offers | Display discounts, happy hours, and promotions. |
-| 🕒 Offer Scheduling | Configure offer start and end dates and times. |
-| 🎯 Offer Targeting | Select target groups and specific menu items for offers. |
-| 🌍 Multilingual Content | Support for English, Amharic, and Tigrigna offer content. |
-| 🔐 Admin Authentication | Protected administration access. |
-| 📊 Admin Dashboard | Manage restaurant menu content and offers. |
-| 📲 Responsive Interface | Designed for both mobile and desktop screens. |
+| 📱 QR Menu Access | Customers can scan a QR code and open the menu in their mobile browser. |
+| 🍽️ Menu Categories | Browse food and drink categories. |
+| 🧾 Menu Details | View menu items, descriptions, and prices. |
+| 💰 ETB Pricing | Display menu prices in Ethiopian Birr (ETB). |
+| 🎨 Visual Menu Design | Category-based poster imagery and a restaurant-focused interface. |
+| 🎉 Special Offers | Explore available discounts, happy hours, and promotions. |
+| 🔐 Admin Authentication | Protect administrative access through Supabase Auth. |
+| ⚙️ Menu Management | Create, edit, hide, show, and delete categories and manage menu items. |
+| 🗓️ Offer Scheduling | Set offer start and end dates and times. |
+| 🎯 Offer Targeting | Select the relevant customer groups and menu items for offers. |
+| 🌐 Web & Android | Built to support web browsers and Android devices. |
 
 ---
 
-## 👨‍🍳 Customer Experience
+## 📱 Customer Experience
 
-GreenGo provides customers with a digital menu that can be accessed without installing a mobile application.
+GreenGo provides customers with a straightforward way to explore a restaurant's menu.
 
-### What customers can do
+### How It Works
 
-- Browse restaurant menu categories.
-- Explore available food and drink selections.
-- View menu prices in Ethiopian Birr (ETB).
-- Discover current special offers.
-- Open individual offer details.
-- Read offer descriptions in supported languages.
-- Access the menu through a mobile browser.
+1. Scan the restaurant's QR code.
+2. Open the digital menu in a mobile browser.
+3. Browse available food and drink categories.
+4. Explore menu items and their prices.
+5. View special offers and promotion details.
 
-**No ordering or checkout functionality is currently included.** GreenGo focuses on digital menu presentation and management.
+**No application installation is required to browse the web menu.**
+
+> GreenGo currently focuses on digital menu browsing and offer discovery. Online ordering, cart management, and payment processing are not included.
 
 ---
 
-## ⚙️ Admin Dashboard
+## 🛠️ Admin Dashboard
 
-The administration dashboard gives authorized administrators control over the restaurant's digital menu.
+GreenGo includes an administration dashboard for managing restaurant menu content.
 
-### Menu Management
-
+### Category Management
 - Create new menu categories.
-- Edit existing categories.
+- Edit existing category information.
 - Hide or show categories.
 - Delete categories.
-- Add and update menu items.
-- Change item prices and images.
-- Control the visibility of menu content.
 
-### Offer Management
+### Menu Item Management
+- Add new food and drink items.
+- Update item information and prices.
+- Manage item images.
+- Organize items within the menu.
 
-- Create different types of special offers.
-- Edit and delete existing offers.
-- Select menu items for offers.
-- Configure offer target groups.
-- Schedule offers using start and end dates and times.
-- Manage offer information from the dashboard.
-
----
-
-## 🎁 Special Offers
-
-GreenGo includes a dedicated special offers feature for displaying restaurant promotions.
-
-Supported offer types include:
-
-| Offer Type | Description |
-|---|---|
-| 🏷️ Discounts | Display discounted menu items and their original prices. |
-| 🕒 Happy Hours | Schedule special offers for specific periods. |
-| 🎉 Promotions | Create promotional offers for selected menu items and target groups. |
-
-Offer information can include descriptions, dates, times, selected menu items, and applicable target groups.
+### Administration & Access
+- Protected administrator login.
+- Manage menu content through the dashboard.
+- Keep customer-facing menu information up to date.
 
 ---
 
-## 📸 Screenshots & Preview
+## 🎉 Special Offers
 
-Explore GreenGo on both desktop and mobile devices.
+The Special Offers feature allows administrators to create and manage restaurant promotions.
 
-> Screenshots are stored in the repository under `screenshots/`. Click any image to view it at full resolution.
+### Available Offer Management
+
+- Create, edit, and delete offers.
+- Configure discounts, happy hours, and promotions.
+- Set offer start and end dates.
+- Set offer start and end times.
+- Choose the relevant target groups.
+- Select the menu items associated with an offer.
+- Display offer information on the customer-facing menu.
+
+This gives restaurants more flexibility when managing promotions and communicating them to customers.
+
+---
+
+## 📸 Screenshots
+
+Explore the GreenGo interface on desktop and mobile devices.
+
+### 🖥️ Desktop Experience
 
 <details>
-<summary><strong>🖥️ Desktop Experience — 9 Screenshots</strong></summary>
-
-<br />
+<summary><strong>View Desktop Screenshots</strong></summary>
 
 <p align="center">
-  <a href="screenshots/1.png"><img src="screenshots/1.png" alt="GreenGo Desktop Screenshot 1" width="100%" /></a>
+  <a href="screenshots/1.png"><img src="screenshots/1.png" width="48%" alt="GreenGo Desktop Screenshot 1" /></a>
+  <a href="screenshots/3.png"><img src="screenshots/3.png" width="48%" alt="GreenGo Desktop Screenshot 3" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/3.png"><img src="screenshots/3.png" alt="GreenGo Desktop Screenshot 3" width="100%" /></a>
+  <a href="screenshots/5.png"><img src="screenshots/5.png" width="48%" alt="GreenGo Desktop Screenshot 5" /></a>
+  <a href="screenshots/7.png"><img src="screenshots/7.png" width="48%" alt="GreenGo Desktop Screenshot 7" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/5.png"><img src="screenshots/5.png" alt="GreenGo Desktop Screenshot 5" width="100%" /></a>
+  <a href="screenshots/10.png"><img src="screenshots/10.png" width="48%" alt="GreenGo Desktop Screenshot 10" /></a>
+  <a href="screenshots/14.png"><img src="screenshots/14.png" width="48%" alt="GreenGo Desktop Screenshot 14" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/7.png"><img src="screenshots/7.png" alt="GreenGo Desktop Screenshot 7" width="100%" /></a>
+  <a href="screenshots/16.png"><img src="screenshots/16.png" width="48%" alt="GreenGo Desktop Screenshot 16" /></a>
+  <a href="screenshots/20.png"><img src="screenshots/20.png" width="48%" alt="GreenGo Desktop Screenshot 20" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/10.png"><img src="screenshots/10.png" alt="GreenGo Desktop Screenshot 10" width="100%" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/14.png"><img src="screenshots/14.png" alt="GreenGo Desktop Screenshot 14" width="100%" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/16.png"><img src="screenshots/16.png" alt="GreenGo Desktop Screenshot 16" width="100%" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/20.png"><img src="screenshots/20.png" alt="GreenGo Desktop Screenshot 20" width="100%" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/21.png"><img src="screenshots/21.png" alt="GreenGo Desktop Screenshot 21" width="100%" /></a>
+  <a href="screenshots/21.png"><img src="screenshots/21.png" width="48%" alt="GreenGo Desktop Screenshot 21" /></a>
 </p>
 
 </details>
 
+### 📲 Mobile Experience
+
 <details>
-<summary><strong>📱 Mobile Experience — 12 Screenshots</strong></summary>
-
-<br />
+<summary><strong>View Mobile Screenshots</strong></summary>
 
 <p align="center">
-  <a href="screenshots/2.png"><img src="screenshots/2.png" alt="GreenGo Mobile Screenshot 2" width="45%" /></a>
-  <a href="screenshots/4.png"><img src="screenshots/4.png" alt="GreenGo Mobile Screenshot 4" width="45%" /></a>
+  <a href="screenshots/2.png"><img src="screenshots/2.png" width="30%" alt="GreenGo Mobile Screenshot 2" /></a>
+  <a href="screenshots/4.png"><img src="screenshots/4.png" width="30%" alt="GreenGo Mobile Screenshot 4" /></a>
+  <a href="screenshots/6.png"><img src="screenshots/6.png" width="30%" alt="GreenGo Mobile Screenshot 6" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/6.png"><img src="screenshots/6.png" alt="GreenGo Mobile Screenshot 6" width="45%" /></a>
-  <a href="screenshots/8.png"><img src="screenshots/8.png" alt="GreenGo Mobile Screenshot 8" width="45%" /></a>
+  <a href="screenshots/8.png"><img src="screenshots/8.png" width="30%" alt="GreenGo Mobile Screenshot 8" /></a>
+  <a href="screenshots/9.png"><img src="screenshots/9.png" width="30%" alt="GreenGo Mobile Screenshot 9" /></a>
+  <a href="screenshots/11.png"><img src="screenshots/11.png" width="30%" alt="GreenGo Mobile Screenshot 11" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/9.png"><img src="screenshots/9.png" alt="GreenGo Mobile Screenshot 9" width="45%" /></a>
-  <a href="screenshots/11.png"><img src="screenshots/11.png" alt="GreenGo Mobile Screenshot 11" width="45%" /></a>
+  <a href="screenshots/12.png"><img src="screenshots/12.png" width="30%" alt="GreenGo Mobile Screenshot 12" /></a>
+  <a href="screenshots/13.png"><img src="screenshots/13.png" width="30%" alt="GreenGo Mobile Screenshot 13" /></a>
+  <a href="screenshots/15.png"><img src="screenshots/15.png" width="30%" alt="GreenGo Mobile Screenshot 15" /></a>
 </p>
 
 <p align="center">
-  <a href="screenshots/12.png"><img src="screenshots/12.png" alt="GreenGo Mobile Screenshot 12" width="45%" /></a>
-  <a href="screenshots/13.png"><img src="screenshots/13.png" alt="GreenGo Mobile Screenshot 13" width="45%" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/15.png"><img src="screenshots/15.png" alt="GreenGo Mobile Screenshot 15" width="45%" /></a>
-  <a href="screenshots/17.png"><img src="screenshots/17.png" alt="GreenGo Mobile Screenshot 17" width="45%" /></a>
-</p>
-
-<p align="center">
-  <a href="screenshots/18.png"><img src="screenshots/18.png" alt="GreenGo Mobile Screenshot 18" width="45%" /></a>
-  <a href="screenshots/19.png"><img src="screenshots/19.png" alt="GreenGo Mobile Screenshot 19" width="45%" /></a>
+  <a href="screenshots/17.png"><img src="screenshots/17.png" width="30%" alt="GreenGo Mobile Screenshot 17" /></a>
+  <a href="screenshots/18.png"><img src="screenshots/18.png" width="30%" alt="GreenGo Mobile Screenshot 18" /></a>
+  <a href="screenshots/19.png"><img src="screenshots/19.png" width="30%" alt="GreenGo Mobile Screenshot 19" /></a>
 </p>
 
 </details>
 
 ---
 
-## 🛠️ Built With
+## 💻 Technology Stack
 
-GreenGo is developed using the following technologies and libraries.
-
-<p align="center">
-  <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Native" />
-  <img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" alt="Expo" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Netlify" />
-</p>
+GreenGo uses the following technologies:
 
 | Technology | Purpose |
 |---|---|
-| React Native | Cross-platform application development |
-| Expo | Application development and build tooling |
-| Expo Router | File-based application navigation |
-| JavaScript | Application logic |
-| TypeScript | Typed application development |
-| Supabase | Backend services and authentication |
-| React Native Web | Web application support |
-| Netlify | Web deployment |
+| [React Native](https://reactnative.dev/) | Application development |
+| [Expo](https://expo.dev/) | Development and application tooling |
+| [Expo Router](https://docs.expo.dev/router/introduction/) | File-based navigation |
+| [React Native Web](https://necolas.github.io/react-native-web/) | Web support |
+| [Supabase](https://supabase.com/) | Database and authentication |
+| [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) | Application logic |
+| [TypeScript](https://www.typescriptlang.org/) | Typed application code |
+| [Netlify](https://www.netlify.com/) | Web deployment and hosting |
 
 ---
 
 ## 📂 Project Structure
 
-The following is based on the current application structure.
+The application is organized around Expo Router routes and reusable components.
 
 ```text
 GreenGo/
 │
 ├── assets/
+│   ├── images/
+│   └── ...
 │
 ├── src/
 │   ├── app/
@@ -275,19 +252,33 @@ GreenGo/
 │   │   │   ├── offers/
 │   │   │   ├── add-item.jsx
 │   │   │   ├── categories.jsx
+│   │   │   ├── category.jsx
 │   │   │   ├── dashboard.jsx
 │   │   │   ├── login.jsx
+│   │   │   ├── offers.jsx
 │   │   │   └── settings.jsx
 │   │   │
 │   │   ├── details/
 │   │   ├── item/
 │   │   ├── menu/
-│   │   │   └── offer/
+│   │   │   ├── offer/
+│   │   │   ├── breakfast.tsx
+│   │   │   ├── burger-and-sandwich.tsx
+│   │   │   ├── chinese.tsx
+│   │   │   ├── hot-drinks.tsx
+│   │   │   ├── juice-and-soft-drinks.tsx
+│   │   │   ├── offers.tsx
+│   │   │   ├── pizza.tsx
+│   │   │   ├── rice-pasta-wrap.tsx
+│   │   │   └── salads-and-soup.tsx
+│   │   │
 │   │   ├── _layout.tsx
 │   │   └── index.tsx
 │   │
 │   ├── components/
-│   │   └── admin/
+│   │   ├── admin/
+│   │   └── ...
+│   │
 │   ├── constants/
 │   ├── data/
 │   ├── hooks/
@@ -296,25 +287,24 @@ GreenGo/
 │   └── utils/
 │
 ├── screenshots/
-│
 ├── package.json
 └── README.md
 ```
 
 ---
 
-## 💻 Getting Started
+## 🚀 Getting Started
 
 To run GreenGo locally, make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/)
-- [npm](https://www.npmjs.com/)
+- npm (included with Node.js)
 - [Git](https://git-scm.com/)
-- [Expo Go](https://expo.dev/go) (for testing on a physical mobile device)
+- A code editor such as [Visual Studio Code](https://code.visualstudio.com/)
 
----
+You will also need access to the Supabase project configuration used by the application.
 
-## 📦 Installation
+## 📥 Installation
 
 **1. Clone the repository**
 
@@ -334,37 +324,33 @@ cd GreenGo-Menu-App/GreenGo
 npm install
 ```
 
-**4. Configure backend credentials**
+**4. Configure Supabase**
 
-Configure the Supabase project credentials required by the application.
+Check the Supabase client configuration in the `src/lib/` directory. Provide your Supabase project URL and the appropriate public client key using the configuration format expected by the application.
 
-Check the existing Supabase configuration in `src/lib/` and provide the required environment variables or configuration values before running the application.
-
-Do not commit private credentials, secret keys, or service-role keys to the repository.
-
----
+Do not expose or commit your Supabase service-role key or other private credentials.
 
 ## ▶️ Running the Project
 
-**Start the Expo development server**
+Start the Expo development server:
 
 ```bash
 npx expo start
 ```
 
-**Run on Android**
-
-```bash
-npx expo start --android
-```
-
-**Run on Web**
+Run the web version:
 
 ```bash
 npx expo start --web
 ```
 
-**Run lint checks**
+Run on Android:
+
+```bash
+npx expo start --android
+```
+
+Run the lint script:
 
 ```bash
 npm run lint
@@ -372,55 +358,54 @@ npm run lint
 
 ---
 
-## 🗺️ Roadmap
+## 🛣️ Future Improvements
 
-GreenGo is already a functional digital restaurant menu application. Future improvements may include:
+Possible directions for future development include:
 
-- [ ] Multi-restaurant support.
-- [ ] More flexible restaurant customization.
-- [ ] Additional menu presentation options.
-- [ ] Further improvements to the administration experience.
-- [ ] Additional deployment and production optimizations.
+- 🏪 Multi-restaurant support.
+- 🛒 Online ordering and cart functionality.
+- 💳 Online payment integration.
+- 📊 Restaurant analytics and menu performance insights.
+- 🌍 Additional language support.
+- 🔔 Customer notifications for new promotions.
+
+These are potential future enhancements and are not currently presented as existing features.
 
 ---
 
 ## 🤝 Contributing
 
-GreenGo is an independently developed public portfolio project.
-
-Suggestions, feedback, bug reports, and improvements are welcome.
+Contributions, suggestions, and feedback are welcome.
 
 If you would like to contribute:
 
 1. Fork the repository.
 2. Create a new branch.
 3. Make your changes.
-4. Submit a pull request.
+4. Commit your changes.
+5. Open a pull request.
 
-For significant changes, please open an issue first to discuss your proposal.
+For major changes, please open an issue first to discuss what you would like to improve.
 
 ---
 
 ## 👨‍💻 About the Developer
 
+**Developed by Faniel Negasi**
+
+Computer Science student and software developer interested in building practical digital solutions.
+
 <p align="center">
-  <strong>Faniel Negasi</strong>
-  <br />
-  Computer Science Student | Developer
-  <br />
-  <br />
   <a href="https://github.com/Faniel-7">
     <img src="https://img.shields.io/badge/GitHub-Faniel--7-181717?style=for-the-badge&logo=github" alt="GitHub" />
   </a>
   <a href="https://linkedin.com/in/faniel-negasi">
-    <img src="https://img.shields.io/badge/LinkedIn-Faniel_Negasi-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn" />
+    <img src="https://img.shields.io/badge/LinkedIn-Faniel%20Negasi-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn" />
   </a>
   <a href="mailto:fanielnegasi00@gmail.com">
-    <img src="https://img.shields.io/badge/Email-Contact_Me-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+    <img src="https://img.shields.io/badge/Email-Contact%20Me-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
   </a>
 </p>
-
-GreenGo is an independently developed project created to explore and build a practical digital menu solution for restaurants.
 
 ---
 
@@ -428,16 +413,12 @@ GreenGo is an independently developed project created to explore and build a pra
 
 This project is licensed under the **MIT License**.
 
-You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software, subject to the license terms.
-
-See the [LICENSE](LICENSE) file for details.
+You are free to use, modify, and distribute this project in accordance with the terms of the license. See the [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  <strong>🌿 GreenGo — A Better Way to Explore Restaurant Menus.</strong>
+  <strong>🍃 GreenGo — A better way to explore restaurant menus.</strong>
   <br />
-  <a href="https://greengo-menu.netlify.app/">Visit GreenGo</a>
-  &nbsp; • &nbsp;
-  <a href="https://github.com/Faniel-7/GreenGo-Menu-App">View Source Code</a>
+  <sub>Designed and developed with care.</sub>
 </p>
